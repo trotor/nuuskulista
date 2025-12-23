@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noutaja-aiheisia materiaaleja netissä</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Noutaja-aiheisia materiaaleja netissä</h1>
+            <p class="subtitle">Kokoelma podcasteja, videoita ja muita resursseja noutajien koulutuksesta</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <p>Tämä sivusto kerää yhteen netissä olevia noutaja-aiheisia materiaaleja.
+            Sivusto on luotu Nuusku-lehden artikkelia varten ja sitä päivitetään säännöllisesti uusilla löydöillä.</p>
+        </section>
+
+        <div class="filters">
+            <button class="filter-btn active" data-category="all">Kaikki</button>
+            <button class="filter-btn" data-category="podcast">Podcastit</button>
+            <button class="filter-btn" data-category="video">Videot</button>
+            <button class="filter-btn" data-category="article">Artikkelit</button>
+            <button class="filter-btn" data-category="course">Kurssit</button>
+            <button class="filter-btn" data-category="other">Muut</button>
+        </div>
+
+        <div id="resources-container">
+            <!-- Resources will be loaded here by JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Päivitetty: <span id="last-updated"></span></p>
+            <p>Ehdotuksia uusista materiaaleista? Ota yhteyttä!</p>
+        </div>
+    </footer>
+
+    <script src="resources.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
