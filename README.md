@@ -2,6 +2,15 @@
 
 Kokoelma podcasteja, videoita ja muita resursseja noutajien koulutuksesta. Sivusto on luotu Nuusku-lehden artikkelia varten.
 
+## Sivusto
+
+**🔗 https://trotor.github.io/nuuskulista/**
+
+<div align="center">
+  <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://trotor.github.io/nuuskulista/" alt="QR-koodi sivustolle" />
+  <p><em>Skannaa QR-koodi päästäksesi sivustolle</em></p>
+</div>
+
 ## Sivuston päivittäminen
 
 ### Uuden resurssin lisääminen
