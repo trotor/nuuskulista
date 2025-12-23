@@ -1,0 +1,63 @@
+name: Lisää uusi resurssi
+description: Ehdota uutta noutaja-aiheista materiaalia listalle
+title: "[RESURSSI]: "
+labels: ["uusi-resurssi"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Kiitos ehdotuksesta! Täytä alla olevat tiedot, niin luomme automaattisesti pull requestin.
+
+  - type: input
+    id: title
+    attributes:
+      label: Resurssin nimi
+      description: Podcastin, videon tai artikkelin nimi
+      placeholder: "esim. Noutajan koulutus -podcast"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Kuvaus
+      description: Lyhyt kuvaus sisällöstä (1-3 virkettä)
+      placeholder: "Kerro lyhyesti mistä materiaalissa on kyse..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Kategoria
+      description: Minkä tyyppinen materiaali?
+      options:
+        - podcast
+        - video
+        - article
+        - course
+        - other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Kieli
+      description: Millä kielellä materiaali on?
+      options:
+        - Suomi
+        - Englanti
+        - Ruotsi
+        - Muu
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Linkki
+      description: URL-osoite materiaaliin
+      placeholder: "https://..."
+    validations:
+      required: true

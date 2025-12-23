@@ -11,9 +11,23 @@ Kokoelma podcasteja, videoita ja muita resursseja noutajien koulutuksesta. Sivus
   <p><em>Skannaa QR-koodi päästäksesi sivustolle</em></p>
 </div>
 
-## Sivuston päivittäminen
+## Uuden resurssin lisääminen
 
-### Uuden resurssin lisääminen
+### Helppo tapa: GitHub Issue (suositeltu!)
+
+**Kuka tahansa voi ehdottaa uusia resursseja:**
+
+1. Mene osoitteeseen: [**Lisää uusi resurssi**](https://github.com/trotor/nuuskulista/issues/new?template=lisaa-resurssi.yml)
+2. Täytä lomake (nimi, kuvaus, kategoria, kieli, linkki)
+3. Lähetä Issue
+4. Botti luo automaattisesti Pull Requestin
+5. Ylläpitäjä tarkistaa ja hyväksyy muutoksen
+
+Tämä toimii myös ylläpitäjälle itselleen - nopein tapa lisätä resursseja!
+
+### Manuaalinen tapa (kehittäjille)
+
+Jos haluat tehdä muutokset suoraan:
 
 1. Avaa `resources.js` tiedosto
 2. Lisää uusi resurssi `resources`-taulukkoon:
@@ -28,7 +42,8 @@ Kokoelma podcasteja, videoita ja muita resursseja noutajien koulutuksesta. Sivus
 },
 ```
 
-3. Päivitä `lastUpdated`-päivämäärä tiedoston yläosassa
+3. Päivitä `lastUpdated`-päivämäärä
+4. Commitoi ja pushaa muutokset
 
 ### Kategoriat
 

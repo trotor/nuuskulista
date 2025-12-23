@@ -1,0 +1,121 @@
+name: Lisää resurssi automaattisesti
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  create-pr:
+    if: contains(github.event.issue.labels.*.name, 'uusi-resurssi')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Parse issue and update resources.js
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const issue = context.payload.issue;
+
+            // Parse issue body
+            const body = issue.body;
+            const titleMatch = body.match(/### Resurssin nimi\s*\n\s*(.+)/);
+            const descMatch = body.match(/### Kuvaus\s*\n\s*(.+)/);
+            const categoryMatch = body.match(/### Kategoria\s*\n\s*(.+)/);
+            const languageMatch = body.match(/### Kieli\s*\n\s*(.+)/);
+            const urlMatch = body.match(/### Linkki\s*\n\s*(.+)/);
+
+            if (!titleMatch || !descMatch || !categoryMatch || !languageMatch || !urlMatch) {
+              console.log('Could not parse all fields from issue');
+              core.setFailed('Issue format is invalid');
+              return;
+            }
+
+            const newResource = {
+              title: titleMatch[1].trim(),
+              description: descMatch[1].trim(),
+              category: categoryMatch[1].trim().toLowerCase(),
+              language: languageMatch[1].trim(),
+              url: urlMatch[1].trim()
+            };
+
+            console.log('Parsed resource:', JSON.stringify(newResource, null, 2));
+
+            // Read current resources.js
+            let resourcesContent = fs.readFileSync('resources.js', 'utf8');
+
+            // Update last updated date
+            const today = new Date();
+            const dateStr = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+            resourcesContent = resourcesContent.replace(
+              /const lastUpdated = ".*";/,
+              `const lastUpdated = "${dateStr}";`
+            );
+
+            // Find the resources array and add new resource
+            const resourceStr = `    {
+        title: "${newResource.title}",
+        description: "${newResource.description}",
+        category: "${newResource.category}",
+        language: "${newResource.language}",
+        url: "${newResource.url}"
+    },`;
+
+            // Insert before the comment about adding new resources or before the closing bracket
+            if (resourcesContent.includes('// Lisää uusia resursseja tähän')) {
+              resourcesContent = resourcesContent.replace(
+                '// Lisää uusia resursseja tähän',
+                `${resourceStr}\n    // Lisää uusia resursseja tähän`
+              );
+            } else {
+              // Find last resource and add after it
+              const lastCommaIndex = resourcesContent.lastIndexOf('},');
+              if (lastCommaIndex > 0) {
+                resourcesContent = resourcesContent.slice(0, lastCommaIndex + 2) +
+                  '\n' + resourceStr +
+                  resourcesContent.slice(lastCommaIndex + 2);
+              }
+            }
+
+            fs.writeFileSync('resources.js', resourcesContent);
+            console.log('Updated resources.js successfully');
+
+            // Store resource info for commit message
+            core.exportVariable('RESOURCE_TITLE', newResource.title);
+            core.exportVariable('ISSUE_NUMBER', issue.number);
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Lisätty resurssi: ${{ env.RESOURCE_TITLE }}"
+          branch: add-resource-${{ github.event.issue.number }}
+          delete-branch: true
+          title: "Lisää resurssi: ${{ env.RESOURCE_TITLE }}"
+          body: |
+            Automaattisesti luotu pull request Issuesta #${{ github.event.issue.number }}
+
+            **Resurssi:** ${{ env.RESOURCE_TITLE }}
+
+            Tarkista muutokset ja hyväksy tai hylkää.
+
+            Sulkee automaattisesti: #${{ github.event.issue.number }}
+          labels: uusi-resurssi
+
+      - name: Comment on issue
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Pull request on luotu automaattisesti! Tarkista se ja hyväksy muutokset.'
+            })
