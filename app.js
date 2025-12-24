@@ -79,11 +79,12 @@ function createResourceCard(resource) {
     card.className = 'resource-card';
 
     const categoryLabel = getCategoryLabel(resource.category);
+    const flag = getLanguageFlag(resource.language);
 
     card.innerHTML = `
         <span class="resource-category">${categoryLabel}</span>
         <h3>${resource.title}</h3>
-        <span class="resource-language">${resource.language}</span>
+        <span class="resource-language">${flag} ${resource.language}</span>
         <p>${resource.description}</p>
         <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
             Avaa resurssi →
@@ -91,6 +92,16 @@ function createResourceCard(resource) {
     `;
 
     return card;
+}
+
+function getLanguageFlag(language) {
+    const flags = {
+        'Suomi': '🇫🇮',
+        'Englanti': '🇬🇧',
+        'Saksa': '🇩🇪',
+        'Ruotsi': '🇸🇪'
+    };
+    return flags[language] || '🌐';
 }
 
 function getCategoryLabel(category) {
