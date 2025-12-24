@@ -16,6 +16,17 @@ document.addEventListener('DOMContentLoaded', function() {
             renderResources(category);
         });
     });
+
+    // Popup functionality
+    const popup = document.getElementById('help-popup');
+    const openBtn = document.getElementById('open-help');
+    const closeBtn = document.getElementById('close-popup');
+
+    openBtn.addEventListener('click', () => popup.classList.add('active'));
+    closeBtn.addEventListener('click', () => popup.classList.remove('active'));
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) popup.classList.remove('active');
+    });
 });
 
 function renderResources(category) {

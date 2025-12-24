@@ -37,9 +37,26 @@
     <footer>
         <div class="container">
             <p>Päivitetty: <span id="last-updated"></span></p>
-            <p>Ehdotuksia uusista materiaaleista? Ota yhteyttä!</p>
+            <p>Ehdotuksia uusista materiaaleista? <button id="open-help" class="help-link">Katso ohjeet</button></p>
         </div>
     </footer>
+
+    <!-- Popup-ohje -->
+    <div id="help-popup" class="popup-overlay">
+        <div class="popup-content">
+            <button id="close-popup" class="popup-close">&times;</button>
+            <h2>Ehdota uutta resurssia</h2>
+            <p>Voit ehdottaa uusia materiaaleja GitHubin kautta. Ei vaadi ohjelmointiosaamista!</p>
+            <ol>
+                <li>Klikkaa alla olevaa linkkiä</li>
+                <li>Kirjaudu GitHub-tilillesi (tai luo tili)</li>
+                <li>Täytä lomake: nimi, kuvaus, kategoria, kieli ja linkki</li>
+                <li>Lähetä ehdotus klikkaamalla "Submit new issue"</li>
+            </ol>
+            <p>Ehdotuksesi käsitellään ja lisätään sivustolle, jos se sopii kokoelmaan.</p>
+            <a href="https://github.com/trotor/nuuskulista/issues/new?template=lisaa-resurssi.yml" target="_blank" class="popup-btn">Ehdota resurssia</a>
+        </div>
+    </div>
 
     <script src="resources.js"></script>
     <script src="app.js"></script>

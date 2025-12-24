@@ -151,6 +151,91 @@ footer p {
     margin: 5px 0;
 }
 
+.help-link {
+    background: none;
+    border: none;
+    color: #97bc62;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+}
+
+.help-link:hover {
+    color: #b8d88a;
+}
+
+/* Popup */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    color: #333;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+}
+
+.popup-close:hover {
+    color: #333;
+}
+
+.popup-content h2 {
+    color: #2c5f2d;
+    margin-bottom: 15px;
+}
+
+.popup-content ol {
+    margin: 15px 0 15px 20px;
+}
+
+.popup-content li {
+    margin-bottom: 8px;
+}
+
+.popup-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 25px;
+    background: #2c5f2d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.popup-btn:hover {
+    background: #1f4420;
+}
+
 @media (max-width: 768px) {
     header h1 {
         font-size: 1.8em;
