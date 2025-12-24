@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuuskulista - Hallinta</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        h1 { color: #2c5f2d; margin-bottom: 20px; }
+        .toolbar {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .toolbar button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary { background: #2c5f2d; color: white; }
+        .btn-primary:hover { background: #1f4420; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .count { margin-left: auto; color: #666; }
+        .status {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+        .status.success { display: block; background: #d4edda; color: #155724; }
+        .status.error { display: block; background: #f8d7da; color: #721c24; }
+
+        #resource-list {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: grab;
+        }
+        .resource-item:last-child { border-bottom: none; }
+        .resource-item.dragging {
+            opacity: 0.5;
+            background: #e8f5e9;
+        }
+        .resource-item.drag-over {
+            border-top: 3px solid #2c5f2d;
+        }
+        .drag-handle {
+            color: #999;
+            font-size: 20px;
+            cursor: grab;
+        }
+        .resource-info { flex: 1; }
+        .resource-title { font-weight: 600; color: #333; }
+        .resource-meta { font-size: 12px; color: #666; margin-top: 4px; }
+        .resource-meta span {
+            display: inline-block;
+            background: #e0e0e0;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-right: 5px;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px 10px;
+        }
+        .delete-btn:hover { background: #fee; border-radius: 4px; }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐕 Nuuskulista - Hallinta</h1>
+
+    <div class="toolbar">
+        <button class="btn-primary" onclick="saveResources()">💾 Tallenna</button>
+        <button class="btn-secondary" onclick="loadResources()">🔄 Lataa uudelleen</button>
+        <span id="status" class="status"></span>
+        <span class="count"><span id="count">0</span> resurssia</span>
+    </div>
+
+    <div id="resource-list">
+        <div class="loading">Ladataan...</div>
+    </div>
+
+    <script>
+        let currentResources = [];
+        let draggedItem = null;
+
+        async function loadResources() {
+            try {
+                const res = await fetch('/api/resources');
+                const data = await res.json();
+                currentResources = data.resources;
+                render();
+                showStatus('Ladattu!', 'success');
+            } catch (err) {
+                showStatus('Virhe ladattaessa: ' + err.message, 'error');
+            }
+        }
+
+        async function saveResources() {
+            try {
+                const res = await fetch('/api/resources', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ resources: currentResources })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showStatus('Tallennettu!', 'success');
+                } else {
+                    showStatus('Virhe: ' + data.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Virhe tallennettaessa: ' + err.message, 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+            setTimeout(() => { status.className = 'status'; }, 3000);
+        }
+
+        function render() {
+            const list = document.getElementById('resource-list');
+            list.innerHTML = '';
+
+            currentResources.forEach((resource, index) => {
+                const item = document.createElement('div');
+                item.className = 'resource-item';
+                item.draggable = true;
+                item.dataset.index = index;
+
+                const flag = getFlag(resource.language);
+                const category = getCategoryLabel(resource.category);
+
+                item.innerHTML = `
+                    <span class="drag-handle">⋮⋮</span>
+                    <div class="resource-info">
+                        <div class="resource-title">${resource.title}</div>
+                        <div class="resource-meta">
+                            <span>${category}</span>
+                            <span>${flag} ${resource.language}</span>
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteResource(${index})" title="Poista">✕</button>
+                `;
+
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragleave', handleDragLeave);
+
+                list.appendChild(item);
+            });
+
+            document.getElementById('count').textContent = currentResources.length;
+        }
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.resource-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            if (this !== draggedItem) {
+                this.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this !== draggedItem) {
+                const fromIndex = parseInt(draggedItem.dataset.index);
+                const toIndex = parseInt(this.dataset.index);
+
+                const item = currentResources.splice(fromIndex, 1)[0];
+                currentResources.splice(toIndex, 0, item);
+
+                render();
+            }
+        }
+
+        function deleteResource(index) {
+            const resource = currentResources[index];
+            if (confirm(`Poistetaanko "${resource.title}"?`)) {
+                currentResources.splice(index, 1);
+                render();
+            }
+        }
+
+        function getFlag(language) {
+            const flags = { 'Suomi': '🇫🇮', 'Englanti': '🇬🇧', 'Saksa': '🇩🇪', 'Ruotsi': '🇸🇪' };
+            return flags[language] || '🌐';
+        }
+
+        function getCategoryLabel(category) {
+            const labels = { 'podcast': 'Podcast', 'video': 'Video', 'article': 'Artikkeli', 'course': 'Kurssi', 'other': 'Muu' };
+            return labels[category] || category;
+        }
+
+        // Init
+        loadResources();
+    </script>
+</body>
+</html>

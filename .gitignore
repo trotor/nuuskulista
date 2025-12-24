@@ -13,5 +13,5 @@
 *.swo
 *~
 
-# Local admin page
-admin.html
+# Node
+node_modules/

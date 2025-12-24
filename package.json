@@ -1,0 +1,11 @@
+{
+  "name": "nuuskulista",
+  "version": "1.0.0",
+  "description": "Noutaja-aiheisia materiaaleja netissä",
+  "scripts": {
+    "admin": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -41,10 +41,17 @@ GitHub Pages, deploy from branch (main). Päivittyy automaattisesti kun main-haa
 
 ## Hallintasivu (lokaali)
 
-`admin.html` on paikallinen hallintasivu resurssien järjestämiseen ja poistamiseen. Ei mene GitHubiin.
+Node.js-pohjainen hallintasivu resurssien järjestämiseen ja poistamiseen.
 
 Käyttö:
-1. Avaa `admin.html` selaimessa
-2. Raahaa resursseja järjestääksesi niitä
-3. Klikkaa ✕ poistaaksesi resurssin
-4. Klikkaa "Tallenna muutokset" ja kopioi uusi `resources.js`-sisältö
+```bash
+npm install        # Ensimmäisellä kerralla
+npm run admin      # Käynnistä palvelin
+```
+
+Avaa http://localhost:3000/admin.html
+
+Toiminnot:
+- Raahaa resursseja järjestääksesi niitä
+- Klikkaa ✕ poistaaksesi resurssin
+- Klikkaa "Tallenna" tallentaaksesi muutokset suoraan `resources.js`-tiedostoon
