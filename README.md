@@ -21,9 +21,6 @@ Kokoelma podcasteja, videoita ja muita resursseja noutajien koulutuksesta. Sivus
 ### 👤 Olen ylläpitäjä ja haluan hyväksyä ehdotuksen
 → Mene [Pull requests -välilehdelle](https://github.com/trotor/nuuskulista/pulls)
 
-### 🚀 Olen ylläpitäjä ja haluan aktivoida GitHub Pages
-→ Seuraa ohjeita: [GitHub Pages -julkaisu](#github-pages--julkaisu-ylläpitäjälle)
-
 ---
 
 ## Uuden resurssin lisääminen
@@ -137,72 +134,6 @@ git push
 ```
 
 GitHub Pages päivittyy automaattisesti muutaman minuutin kuluessa.
-
-## GitHub Pages -julkaisu (ylläpitäjälle)
-
-### Ensimmäinen kerta - Aktivoi GitHub Pages
-
-1. Mene osoitteeseen: https://github.com/trotor/nuuskulista/settings/pages
-
-2. **Source**-kohdassa:
-   - Valitse **"Deploy from a branch"** (ei "GitHub Actions")
-
-3. **Branch**-kohdassa:
-   - Valitse **"main"** (ei "None"!)
-   - Valitse **"/ (root)"**
-   - Klikkaa **"Save"**
-
-4. Odota 1-2 minuuttia ja päivitä sivu
-
-5. Sivun yläosassa pitäisi näkyä vihreä laatikko:
-   > "Your site is live at https://trotor.github.io/nuuskulista/"
-
-6. Testaa: Avaa https://trotor.github.io/nuuskulista/ selaimessa
-
-### Pull Requestien hyväksyminen
-
-Kun joku (tai sinä itse) lähettää uuden resurssin GitHub Issuen kautta:
-
-1. **Saat ilmoituksen** uudesta Pull Requestista (GitHub-sähköpostiin)
-
-2. **Avaa PR:**
-   - Mene https://github.com/trotor/nuuskulista/pulls
-   - TAI klikkaa linkkiä ilmoituksessa
-
-3. **Tarkista muutokset:**
-   - Klikkaa "Files changed" -välilehteä
-   - Näet mitä `resources.js`-tiedostoon on lisätty
-   - Tarkista että:
-     - Resurssin nimi on järkevä
-     - Kuvaus on asiallinen
-     - URL näyttää oikealta
-     - Kategoria ja kieli ovat oikein
-
-4. **Hyväksy tai hylkää:**
-
-   **Jos hyväksyt:**
-   - Mene takaisin "Conversation"-välilehdelle
-   - Klikkaa vihreää **"Merge pull request"** -nappia
-   - Klikkaa **"Confirm merge"**
-   - Issue sulkeutuu automaattisesti
-   - Sivusto päivittyy 1-2 minuutin kuluttua
-
-   **Jos hylkäät:**
-   - Klikkaa "Close pull request" -nappia
-   - Kirjoita kommentti miksi hylkäsit (valinnainen)
-   - Sulje myös Issue manuaalisesti
-
-### Manuaaliset päivitykset
-
-Jos teit muutoksia suoraan `resources.js`-tiedostoon:
-
-```bash
-git add resources.js
-git commit -m "Lisätty uusia resursseja"
-git push
-```
-
-GitHub Pages päivittyy automaattisesti 1-5 minuutin kuluessa.
 
 ## Tiedostorakenne
 
