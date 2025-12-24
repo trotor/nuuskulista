@@ -38,3 +38,13 @@ GitHub Pages, deploy from branch (main). Päivittyy automaattisesti kun main-haa
 ## Tekoälypromptit
 
 `PROMPTS.md` sisältää promptteja eri tekoälyille (ChatGPT ym.) noutaja-aiheisten materiaalien etsimiseen.
+
+## Hallintasivu (lokaali)
+
+`admin.html` on paikallinen hallintasivu resurssien järjestämiseen ja poistamiseen. Ei mene GitHubiin.
+
+Käyttö:
+1. Avaa `admin.html` selaimessa
+2. Raahaa resursseja järjestääksesi niitä
+3. Klikkaa ✕ poistaaksesi resurssin
+4. Klikkaa "Tallenna muutokset" ja kopioi uusi `resources.js`-sisältö
