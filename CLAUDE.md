@@ -34,3 +34,7 @@ GitHub Actions -workflow (`.github/workflows/add-resource.yml`) luo automaattise
 ## Julkaisu
 
 GitHub Pages, deploy from branch (main). Päivittyy automaattisesti kun main-haaraan pushataan.
+
+## Tekoälypromptit
+
+`PROMPTS.md` sisältää promptteja eri tekoälyille (ChatGPT ym.) noutaja-aiheisten materiaalien etsimiseen.
