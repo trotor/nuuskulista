@@ -1,10 +1,16 @@
 // Päivitä tätä tiedostoa lisätäksesi uusia resursseja
 // Muista päivittää myös lastUpdated-päivämäärä!
 
-const lastUpdated = "24.12.2024";
+const lastUpdated = "25.12.2025";
 
 const resources = [
-    // Videot ja podcastit
+    {
+        title: "Nuuskuhommia podcast",
+        description: "Nuuskuhommia on kotimainen noutajapodcast",
+        category: "podcast",
+        language: "Suomi",
+        url: "https://www.youtube.com/@Nuuskuhommia"
+    },
     {
         title: "Kuonovideo – Noutajan koulutus",
         description: "Videoartikkeli näyttää noutajan perusharjoituksia: noutoa, hakuruutua ja jälkeä.",
@@ -26,8 +32,6 @@ const resources = [
         language: "Englanti",
         url: "https://missskeeter.podbean.com/e/contrasting-marks/"
     },
-
-    // Blogiartikkelit ja oppaat (suomi)
     {
         title: "Harri Siven: Noutajan koulutuksesta",
         description: "Painottaa johdonmukaisuutta, kärsivällisyyttä ja yhteistyön rakentamista.",
@@ -98,8 +102,6 @@ const resources = [
         language: "Suomi",
         url: "https://ollaankoiriksi.fi/lintukoirankoulutus"
     },
-
-    // Blogiartikkelit ja oppaat (englanti)
     {
         title: "Ducks Unlimited: Basic Retriever Training for Duck Hunting",
         description: "Robert Milnerin artikkeli painottaa palkitsemispohjaista koulutusta ja viittä peruskäytöstä.",
@@ -128,8 +130,6 @@ const resources = [
         language: "Englanti",
         url: "https://www.gundogsupply.com/smartarticles.html"
     },
-
-    // Verkkokurssit (suomi)
     {
         title: "Katin Koirakoulu: Noutajan pennun peruskoulutus",
         description: "Maksullinen opas, joka sisältää harjoitusten suunnittelua ja perustaitojen oppimista.",
@@ -152,23 +152,12 @@ const resources = [
         url: "https://www.tinttimaisterin.fi/koirakoulu/kurssit/noutajakurssit/"
     },
     {
-        title: "Ollaan Koiriksi: Noutajakurssit 2025",
-        description: "Kurssitarjonta sisältää noutamisen peruskurssin, jatkokurssin, vesityöskentelyn, ohjatun noudon ja NOU-taipumuskokeen. Koulutus on koiralähtöistä ja positiivista.",
-        category: "course",
-        language: "Suomi",
-        url: "https://ollaankoiriksi.fi/lintukoirankoulutus"
-    },
-
-    // Verkkokurssit (englanti)
-    {
         title: "Cornerstone Gundog Academy",
         description: "Englanninkielinen verkkovalmennus, joka auttaa omistajaa kouluttamaan itsevarman retrieverin.",
         category: "course",
         language: "Englanti",
         url: "https://www.cornerstonegundogacademy.com"
     },
-
-    // Rodunomaiset tiedot
     {
         title: "SNJ: Labradorinnoutaja",
         description: "Korostaa, että peruskoulutus on aloitettava pentuna, jotta aktiivinen ja iso koira pysyy hallinnassa.",
@@ -212,17 +201,10 @@ const resources = [
         url: "https://www.zoomalia.com/magazine/flat-coated-retriever"
     },
     {
-        title: "Zooplus: Sileäkarvainen noutaja",
-        description: "Helposti koulutettava, mutta herkkä; tarvitsee lempeää ja johdonmukaista koulutusta.",
-        category: "article",
-        language: "Saksa",
-        url: "https://www.zooplus.de/magazin/hund/hunderassen/smooth-coated-retriever"
-    },
-    {
         title: "Petspa: Labrador ja golden retriever",
         description: "Labradorit ovat älykkäitä ja energisiä (agility, vesipelastus); goldenit ovat ystävällisiä ja miellyttämisenhaluisia (positiivinen koulutus, varhainen sosiaalistaminen).",
         category: "article",
         language: "Englanti",
         url: "https://www.petspa.com"
-    },
+    }
 ];

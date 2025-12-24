@@ -33,6 +33,8 @@
         .btn-primary:hover { background: #1f4420; }
         .btn-secondary { background: #6c757d; color: white; }
         .btn-secondary:hover { background: #5a6268; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; }
         .btn-danger { background: #dc3545; color: white; }
         .btn-danger:hover { background: #c82333; }
         .count { margin-left: auto; color: #666; }
@@ -56,7 +58,6 @@
             gap: 15px;
             padding: 15px;
             border-bottom: 1px solid #eee;
-            cursor: grab;
         }
         .resource-item:last-child { border-bottom: none; }
         .resource-item.dragging {
@@ -71,8 +72,16 @@
             font-size: 20px;
             cursor: grab;
         }
-        .resource-info { flex: 1; }
-        .resource-title { font-weight: 600; color: #333; }
+        .resource-info {
+            flex: 1;
+            cursor: pointer;
+        }
+        .resource-info:hover .resource-title {
+            color: #1f4420;
+            text-decoration: underline;
+        }
+        .resource-title { font-weight: 600; color: #2c5f2d; }
+        .resource-desc { font-size: 13px; color: #666; margin-top: 4px; }
         .resource-meta { font-size: 12px; color: #666; margin-top: 4px; }
         .resource-meta span {
             display: inline-block;
@@ -81,20 +90,96 @@
             border-radius: 10px;
             margin-right: 5px;
         }
-        .delete-btn {
+        .resource-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .action-btn {
             background: none;
             border: none;
-            color: #dc3545;
             cursor: pointer;
-            font-size: 18px;
-            padding: 5px 10px;
+            font-size: 16px;
+            padding: 5px 8px;
+            border-radius: 4px;
         }
-        .delete-btn:hover { background: #fee; border-radius: 4px; }
+        .action-btn:hover { background: #f0f0f0; }
+        .action-btn.delete:hover { background: #fee; }
+        .action-btn.open { color: #007bff; }
+        .action-btn.edit { color: #28a745; }
+        .action-btn.delete { color: #dc3545; }
 
         .loading {
             text-align: center;
             padding: 40px;
             color: #666;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+        }
+        .modal-content h2 {
+            color: #2c5f2d;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2c5f2d;
+        }
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -102,6 +187,7 @@
     <h1>🐕 Nuuskulista - Hallinta</h1>
 
     <div class="toolbar">
+        <button class="btn-success" onclick="openAddModal()">➕ Lisää uusi</button>
         <button class="btn-primary" onclick="saveResources()">💾 Tallenna</button>
         <button class="btn-secondary" onclick="loadResources()">🔄 Lataa uudelleen</button>
         <span id="status" class="status"></span>
@@ -110,6 +196,57 @@
 
     <div id="resource-list">
         <div class="loading">Ladataan...</div>
+    </div>
+
+    <!-- Edit/Add Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Muokkaa resurssia</h2>
+            <form id="resource-form">
+                <input type="hidden" id="edit-index" value="-1">
+
+                <div class="form-group">
+                    <label for="edit-title">Nimi *</label>
+                    <input type="text" id="edit-title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-description">Kuvaus *</label>
+                    <textarea id="edit-description" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-category">Kategoria *</label>
+                    <select id="edit-category" required>
+                        <option value="podcast">Podcast</option>
+                        <option value="video">Video</option>
+                        <option value="article">Artikkeli</option>
+                        <option value="course">Kurssi</option>
+                        <option value="other">Muu</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-language">Kieli *</label>
+                    <select id="edit-language" required>
+                        <option value="Suomi">Suomi</option>
+                        <option value="Englanti">Englanti</option>
+                        <option value="Ruotsi">Ruotsi</option>
+                        <option value="Saksa">Saksa</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-url">Linkki *</label>
+                    <input type="url" id="edit-url" required placeholder="https://...">
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Peruuta</button>
+                    <button type="submit" class="btn-primary">Tallenna</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -168,15 +305,24 @@
 
                 item.innerHTML = `
                     <span class="drag-handle">⋮⋮</span>
-                    <div class="resource-info">
+                    <div class="resource-info" onclick="openEditModal(${index})">
                         <div class="resource-title">${resource.title}</div>
+                        <div class="resource-desc">${truncate(resource.description, 80)}</div>
                         <div class="resource-meta">
                             <span>${category}</span>
                             <span>${flag} ${resource.language}</span>
                         </div>
                     </div>
-                    <button class="delete-btn" onclick="deleteResource(${index})" title="Poista">✕</button>
+                    <div class="resource-actions">
+                        <button class="action-btn open" onclick="window.open('${resource.url}', '_blank')" title="Avaa linkki">🔗</button>
+                        <button class="action-btn edit" onclick="openEditModal(${index})" title="Muokkaa">✏️</button>
+                        <button class="action-btn delete" onclick="deleteResource(${index})" title="Poista">✕</button>
+                    </div>
                 `;
+
+                // Drag events on handle only
+                const handle = item.querySelector('.drag-handle');
+                handle.addEventListener('mousedown', () => item.draggable = true);
 
                 item.addEventListener('dragstart', handleDragStart);
                 item.addEventListener('dragend', handleDragEnd);
@@ -188,6 +334,10 @@
             });
 
             document.getElementById('count').textContent = currentResources.length;
+        }
+
+        function truncate(str, len) {
+            return str.length > len ? str.substring(0, len) + '...' : str;
         }
 
         function handleDragStart(e) {
@@ -233,6 +383,72 @@
                 render();
             }
         }
+
+        // Modal functions
+        function openAddModal() {
+            document.getElementById('modal-title').textContent = 'Lisää uusi resurssi';
+            document.getElementById('edit-index').value = -1;
+            document.getElementById('edit-title').value = '';
+            document.getElementById('edit-description').value = '';
+            document.getElementById('edit-category').value = 'article';
+            document.getElementById('edit-language').value = 'Suomi';
+            document.getElementById('edit-url').value = '';
+            document.getElementById('edit-modal').classList.add('active');
+            document.getElementById('edit-title').focus();
+        }
+
+        function openEditModal(index) {
+            const resource = currentResources[index];
+            document.getElementById('modal-title').textContent = 'Muokkaa resurssia';
+            document.getElementById('edit-index').value = index;
+            document.getElementById('edit-title').value = resource.title;
+            document.getElementById('edit-description').value = resource.description;
+            document.getElementById('edit-category').value = resource.category;
+            document.getElementById('edit-language').value = resource.language;
+            document.getElementById('edit-url').value = resource.url;
+            document.getElementById('edit-modal').classList.add('active');
+            document.getElementById('edit-title').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+        }
+
+        document.getElementById('resource-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const index = parseInt(document.getElementById('edit-index').value);
+            const resource = {
+                title: document.getElementById('edit-title').value.trim(),
+                description: document.getElementById('edit-description').value.trim(),
+                category: document.getElementById('edit-category').value,
+                language: document.getElementById('edit-language').value,
+                url: document.getElementById('edit-url').value.trim()
+            };
+
+            if (index === -1) {
+                // Add new
+                currentResources.unshift(resource);
+                showStatus('Resurssi lisätty!', 'success');
+            } else {
+                // Update existing
+                currentResources[index] = resource;
+                showStatus('Resurssi päivitetty!', 'success');
+            }
+
+            closeModal();
+            render();
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal on backdrop click
+        document.getElementById('edit-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
         function getFlag(language) {
             const flags = { 'Suomi': '🇫🇮', 'Englanti': '🇬🇧', 'Saksa': '🇩🇪', 'Ruotsi': '🇸🇪' };
