@@ -21,12 +21,22 @@
         </section>
 
         <div class="filters">
-            <button class="filter-btn active" data-category="all">Kaikki</button>
-            <button class="filter-btn" data-category="podcast">Podcastit</button>
-            <button class="filter-btn" data-category="video">Videot</button>
-            <button class="filter-btn" data-category="article">Artikkelit</button>
-            <button class="filter-btn" data-category="course">Kurssit</button>
-            <button class="filter-btn" data-category="other">Muut</button>
+            <div class="filter-group">
+                <span class="filter-label">Tyyppi:</span>
+                <button class="filter-btn active" data-category="all">Kaikki</button>
+                <button class="filter-btn" data-category="podcast">Podcastit</button>
+                <button class="filter-btn" data-category="video">Videot</button>
+                <button class="filter-btn" data-category="article">Artikkelit</button>
+                <button class="filter-btn" data-category="course">Kurssit</button>
+                <button class="filter-btn" data-category="other">Muut</button>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Kieli:</span>
+                <button class="filter-btn lang-btn active" data-language="all">Kaikki</button>
+                <button class="filter-btn lang-btn" data-language="Suomi">Suomi</button>
+                <button class="filter-btn lang-btn" data-language="Englanti">Englanti</button>
+                <button class="filter-btn lang-btn" data-language="other">Muu</button>
+            </div>
         </div>
 
         <div id="resources-container">

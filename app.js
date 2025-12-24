@@ -1,19 +1,31 @@
+// Current filter state
+let currentCategory = 'all';
+let currentLanguage = 'all';
+
 // Render resources on page load
 document.addEventListener('DOMContentLoaded', function() {
-    renderResources('all');
+    renderResources();
     document.getElementById('last-updated').textContent = lastUpdated;
 
-    // Add filter button event listeners
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(button => {
+    // Category filter buttons
+    const categoryButtons = document.querySelectorAll('.filter-btn[data-category]');
+    categoryButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
-            // Filter resources
-            const category = this.dataset.category;
-            renderResources(category);
+            currentCategory = this.dataset.category;
+            renderResources();
+        });
+    });
+
+    // Language filter buttons
+    const langButtons = document.querySelectorAll('.filter-btn[data-language]');
+    langButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            langButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            currentLanguage = this.dataset.language;
+            renderResources();
         });
     });
 
@@ -29,16 +41,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function renderResources(category) {
+function renderResources() {
     const container = document.getElementById('resources-container');
     container.innerHTML = '';
 
-    const filteredResources = category === 'all'
-        ? resources
-        : resources.filter(resource => resource.category === category);
+    let filteredResources = resources;
+
+    // Filter by category
+    if (currentCategory !== 'all') {
+        filteredResources = filteredResources.filter(r => r.category === currentCategory);
+    }
+
+    // Filter by language
+    if (currentLanguage !== 'all') {
+        if (currentLanguage === 'other') {
+            filteredResources = filteredResources.filter(r =>
+                r.language !== 'Suomi' && r.language !== 'Englanti'
+            );
+        } else {
+            filteredResources = filteredResources.filter(r => r.language === currentLanguage);
+        }
+    }
 
     if (filteredResources.length === 0) {
-        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">Ei resursseja tässä kategoriassa.</p>';
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">Ei resursseja näillä suodattimilla.</p>';
         return;
     }
 
