@@ -122,7 +122,7 @@ Palauta JSON-muodossa:
 {
   "title": "Resurssin nimi (lyhyt, kuvaava)",
   "description": "1-2 virkkeen kuvaus sisällöstä suomeksi",
-  "category": "podcast|video|article|course|other",
+  "category": "podcast|video|article|course|trainer|shop|other",
   "language": "Suomi|Englanti|Ruotsi|Saksa"
 }
 
@@ -131,6 +131,8 @@ Kategoriat:
 - video: YouTube, webinaarit, videokurssit
 - article: Artikkelit, blogit, oppaat
 - course: Verkkokurssit, koulutusohjelmat
+- trainer: Kouluttajat, valmentajat
+- shop: Verkkokaupat, tarvikkeet
 - other: Muut
 
 Tunnista kieli sisällöstä. Palauta VAIN JSON, ei muuta tekstiä.`

@@ -110,6 +110,8 @@ function getCategoryLabel(category) {
         'video': 'Video',
         'article': 'Artikkeli',
         'course': 'Kurssi',
+        'trainer': 'Kouluttaja',
+        'shop': 'Verkkokauppa',
         'other': 'Muu'
     };
     return labels[category] || category;

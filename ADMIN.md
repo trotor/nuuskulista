@@ -97,6 +97,8 @@ Issue sulkeutuu automaattisesti ja sivusto päivittyy.
 - `video` - YouTube-videot, webinaarit
 - `article` - Artikkelit ja oppaat
 - `course` - Verkkokurssit
+- `trainer` - Kouluttajat ja valmentajat
+- `shop` - Verkkokaupat ja tarvikkeet
 - `other` - Muut materiaalit
 
 **Kielet:**
