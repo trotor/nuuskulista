@@ -52,7 +52,8 @@ const resources = [\n`;
         description: ${JSON.stringify(r.description)},
         category: ${JSON.stringify(r.category)},
         language: ${JSON.stringify(r.language)},
-        url: ${JSON.stringify(r.url)}
+        url: ${JSON.stringify(r.url)},
+        image: ${JSON.stringify(r.image || '')}
     }`;
             if (i < resources.length - 1) output += ',';
             output += '\n';
@@ -66,6 +67,44 @@ const resources = [\n`;
         res.status(500).json({ error: err.message });
     }
 });
+
+// Apufunktio: hae kuva URL:sta
+async function fetchImageFromUrl(url) {
+    try {
+        const response = await fetch(url, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Nuuskulista/1.0)' }
+        });
+        if (!response.ok) return null;
+
+        const html = await response.text();
+        const cheerio = require('cheerio');
+        const $ = cheerio.load(html);
+
+        // Kokeile og:image ensin
+        let image = $('meta[property="og:image"]').attr('content');
+        if (!image) image = $('meta[name="og:image"]').attr('content');
+        if (!image) image = $('meta[property="twitter:image"]').attr('content');
+
+        // Jos löytyi suhteellinen URL, muunna absoluuttiseksi
+        if (image && !image.startsWith('http')) {
+            const urlObj = new URL(url);
+            image = image.startsWith('/')
+                ? `${urlObj.protocol}//${urlObj.host}${image}`
+                : `${urlObj.protocol}//${urlObj.host}/${image}`;
+        }
+
+        // Jos ei og:image, kokeile faviconia
+        if (!image) {
+            const urlObj = new URL(url);
+            image = `https://www.google.com/s2/favicons?domain=${urlObj.host}&sz=128`;
+        }
+
+        return image;
+    } catch (err) {
+        console.error('Image fetch error:', err.message);
+        return null;
+    }
+}
 
 // API: Hae resurssin tiedot URL:sta LLM:llä
 app.post('/api/fetch-resource', async (req, res) => {
@@ -100,6 +139,25 @@ app.post('/api/fetch-resource', async (req, res) => {
         // Parsii HTML cheerio:lla
         const cheerio = require('cheerio');
         const $ = cheerio.load(html);
+
+        // Hae og:image
+        let image = $('meta[property="og:image"]').attr('content');
+        if (!image) image = $('meta[name="og:image"]').attr('content');
+        if (!image) image = $('meta[property="twitter:image"]').attr('content');
+
+        // Muunna suhteellinen URL absoluuttiseksi
+        if (image && !image.startsWith('http')) {
+            const urlObj = new URL(url);
+            image = image.startsWith('/')
+                ? `${urlObj.protocol}//${urlObj.host}${image}`
+                : `${urlObj.protocol}//${urlObj.host}/${image}`;
+        }
+
+        // Fallback: Google favicon
+        if (!image) {
+            const urlObj = new URL(url);
+            image = `https://www.google.com/s2/favicons?domain=${urlObj.host}&sz=128`;
+        }
 
         // Kerää tekstisisältöä
         $('script, style, nav, footer, header').remove();
@@ -158,11 +216,103 @@ Sisältöä: ${bodyText.substring(0, 2000)}`
 
         const resourceData = JSON.parse(jsonMatch[0]);
         resourceData.url = url;
+        resourceData.image = image;
 
         res.json(resourceData);
 
     } catch (err) {
         console.error('Fetch error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// API: Päivitä yksittäisen resurssin kuva
+app.post('/api/refresh-image', async (req, res) => {
+    const { url } = req.body;
+
+    if (!url) {
+        return res.status(400).json({ error: 'URL puuttuu' });
+    }
+
+    try {
+        const image = await fetchImageFromUrl(url);
+        if (image) {
+            res.json({ success: true, image });
+        } else {
+            res.json({ success: false, error: 'Kuvaa ei löytynyt' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// API: Päivitä kaikkien resurssien kuvat
+app.post('/api/refresh-images', async (req, res) => {
+    try {
+        const content = fs.readFileSync('resources.js', 'utf8');
+        const resourcesMatch = content.match(/const resources = \[([\s\S]*)\];/);
+
+        if (!resourcesMatch) {
+            return res.status(500).json({ error: 'Could not parse resources.js' });
+        }
+
+        const resourcesCode = `[${resourcesMatch[1]}]`;
+        const resources = eval(resourcesCode);
+
+        let updated = 0;
+        const total = resources.length;
+
+        // Päivitä kuvat rinnakkain (max 5 kerralla)
+        const batchSize = 5;
+        for (let i = 0; i < resources.length; i += batchSize) {
+            const batch = resources.slice(i, i + batchSize);
+            const results = await Promise.all(
+                batch.map(async (r) => {
+                    const image = await fetchImageFromUrl(r.url);
+                    if (image) {
+                        r.image = image;
+                        updated++;
+                    }
+                    return r;
+                })
+            );
+            // Korvaa päivitetyt takaisin
+            for (let j = 0; j < results.length; j++) {
+                resources[i + j] = results[j];
+            }
+        }
+
+        // Tallenna päivitetyt resurssit
+        const today = new Date();
+        const dateStr = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+
+        let output = `// Päivitä tätä tiedostoa lisätäksesi uusia resursseja
+// Muista päivittää myös lastUpdated-päivämäärä!
+
+const lastUpdated = "${dateStr}";
+
+const resources = [\n`;
+
+        resources.forEach((r, i) => {
+            output += `    {
+        title: ${JSON.stringify(r.title)},
+        description: ${JSON.stringify(r.description)},
+        category: ${JSON.stringify(r.category)},
+        language: ${JSON.stringify(r.language)},
+        url: ${JSON.stringify(r.url)},
+        image: ${JSON.stringify(r.image || '')}
+    }`;
+            if (i < resources.length - 1) output += ',';
+            output += '\n';
+        });
+
+        output += '];\n';
+
+        fs.writeFileSync('resources.js', output);
+        res.json({ success: true, updated, total, message: `Päivitetty ${updated}/${total} kuvaa` });
+
+    } catch (err) {
+        console.error('Refresh images error:', err);
         res.status(500).json({ error: err.message });
     }
 });

@@ -57,6 +57,22 @@
             padding: 15px;
             border-bottom: 1px solid #eee;
         }
+        .resource-thumb {
+            width: 60px;
+            height: 45px;
+            background-size: cover;
+            background-position: center;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .resource-thumb.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 20px;
+        }
         .resource-item:last-child { border-bottom: none; }
         .resource-item.dragging { opacity: 0.5; background: #e8f5e9; }
         .resource-item.drag-over { border-top: 3px solid #2c5f2d; }
@@ -195,6 +211,7 @@
         <button class="btn-success" onclick="openAddModal()">➕ Lisää uusi</button>
         <button class="btn-primary" onclick="saveResources()">💾 Tallenna</button>
         <button class="btn-secondary" onclick="loadResources()">🔄 Lataa uudelleen</button>
+        <button class="btn-secondary" onclick="refreshImages()" id="refresh-images-btn">🖼️ Päivitä kuvat</button>
         <span id="status" class="status"></span>
         <span class="count"><span id="count">0</span> resurssia</span>
     </div>
@@ -365,8 +382,14 @@
                 const flag = getFlag(resource.language);
                 const category = getCategoryLabel(resource.category);
 
+                // Image thumbnail
+                let thumbHtml = resource.image
+                    ? `<div class="resource-thumb" style="background-image: url('${resource.image}')"></div>`
+                    : `<div class="resource-thumb no-image">🖼️</div>`;
+
                 item.innerHTML = `
                     <span class="drag-handle">⋮⋮</span>
+                    ${thumbHtml}
                     <div class="resource-info" onclick="openEditModal(${index})">
                         <div class="resource-title">${resource.title}</div>
                         <div class="resource-desc">${truncate(resource.description, 80)}</div>
@@ -376,6 +399,7 @@
                         </div>
                     </div>
                     <div class="resource-actions">
+                        <button class="action-btn" onclick="refreshSingleImage(${index})" title="Päivitä kuva">🖼️</button>
                         <button class="action-btn open" onclick="window.open('${resource.url}', '_blank')" title="Avaa linkki">🔗</button>
                         <button class="action-btn edit" onclick="openEditModal(${index})" title="Muokkaa">✏️</button>
                         <button class="action-btn delete" onclick="deleteResource(${index})" title="Poista">✕</button>
@@ -425,6 +449,30 @@
             if (confirm(`Poistetaanko "${resource.title}"?`)) {
                 currentResources.splice(index, 1);
                 render();
+            }
+        }
+
+        async function refreshSingleImage(index) {
+            const resource = currentResources[index];
+            showStatus(`Haetaan kuvaa: ${resource.title}...`, 'success');
+
+            try {
+                const res = await fetch('/api/refresh-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: resource.url })
+                });
+                const data = await res.json();
+
+                if (data.success && data.image) {
+                    currentResources[index].image = data.image;
+                    render();
+                    showStatus('Kuva päivitetty!', 'success');
+                } else {
+                    showStatus('Kuvaa ei löytynyt', 'error');
+                }
+            } catch (err) {
+                showStatus('Virhe: ' + err.message, 'error');
             }
         }
 
@@ -594,6 +642,35 @@
         function getCategoryLabel(category) {
             const labels = { 'podcast': 'Podcast', 'video': 'Video', 'article': 'Artikkeli', 'course': 'Kurssi', 'trainer': 'Kouluttaja', 'shop': 'Verkkokauppa', 'other': 'Muu' };
             return labels[category] || category;
+        }
+
+        // Refresh images for all resources
+        async function refreshImages() {
+            if (!confirm('Haetaan kuvat kaikille resursseille? Tämä voi kestää hetken.')) {
+                return;
+            }
+
+            const btn = document.getElementById('refresh-images-btn');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Haetaan kuvia...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/refresh-images', { method: 'POST' });
+                const data = await res.json();
+
+                if (data.success) {
+                    showStatus(data.message, 'success');
+                    loadResources(); // Reload to show updated images
+                } else {
+                    showStatus('Virhe: ' + data.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Virhe: ' + err.message, 'error');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         }
 
         // Init

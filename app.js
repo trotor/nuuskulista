@@ -81,14 +81,23 @@ function createResourceCard(resource) {
     const categoryLabel = getCategoryLabel(resource.category);
     const flag = getLanguageFlag(resource.language);
 
+    // Build image HTML if available
+    let imageHtml = '';
+    if (resource.image) {
+        imageHtml = `<div class="resource-image" style="background-image: url('${resource.image}')"></div>`;
+    }
+
     card.innerHTML = `
-        <span class="resource-category">${categoryLabel}</span>
-        <h3>${resource.title}</h3>
-        <span class="resource-language">${flag} ${resource.language}</span>
-        <p>${resource.description}</p>
-        <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
-            Avaa resurssi →
-        </a>
+        ${imageHtml}
+        <div class="resource-content">
+            <span class="resource-category">${categoryLabel}</span>
+            <h3>${resource.title}</h3>
+            <span class="resource-language">${flag} ${resource.language}</span>
+            <p>${resource.description}</p>
+            <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
+                Avaa resurssi →
+            </a>
+        </div>
     `;
 
     return card;
