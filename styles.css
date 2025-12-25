@@ -82,6 +82,23 @@ header h1 {
     color: white;
 }
 
+/* Category filter colors */
+.filter-btn.cat-podcast.active { background: rgba(156, 39, 176, 0.9); border-color: rgba(156, 39, 176, 0.9); color: white; }
+.filter-btn.cat-video.active { background: rgba(244, 67, 54, 0.9); border-color: rgba(244, 67, 54, 0.9); color: white; }
+.filter-btn.cat-article.active { background: rgba(33, 150, 243, 0.9); border-color: rgba(33, 150, 243, 0.9); color: white; }
+.filter-btn.cat-course.active { background: rgba(255, 152, 0, 0.9); border-color: rgba(255, 152, 0, 0.9); color: white; }
+.filter-btn.cat-trainer.active { background: rgba(76, 175, 80, 0.9); border-color: rgba(76, 175, 80, 0.9); color: white; }
+.filter-btn.cat-shop.active { background: rgba(0, 188, 212, 0.9); border-color: rgba(0, 188, 212, 0.9); color: white; }
+.filter-btn.cat-other.active { background: rgba(158, 158, 158, 0.9); border-color: rgba(158, 158, 158, 0.9); color: white; }
+
+.filter-btn.cat-podcast { border-color: rgb(156, 39, 176); color: rgb(156, 39, 176); }
+.filter-btn.cat-video { border-color: rgb(244, 67, 54); color: rgb(244, 67, 54); }
+.filter-btn.cat-article { border-color: rgb(33, 150, 243); color: rgb(33, 150, 243); }
+.filter-btn.cat-course { border-color: rgb(255, 152, 0); color: rgb(255, 152, 0); }
+.filter-btn.cat-trainer { border-color: rgb(76, 175, 80); color: rgb(76, 175, 80); }
+.filter-btn.cat-shop { border-color: rgb(0, 188, 212); color: rgb(0, 188, 212); }
+.filter-btn.cat-other { border-color: rgb(158, 158, 158); color: rgb(158, 158, 158); }
+
 #resources-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -132,22 +149,70 @@ header h1 {
 
 .resource-header h3 {
     color: white;
-    margin: 8px 0;
+    margin: 0 0 10px 0;
     font-size: 1.3em;
     text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-.resource-header .resource-category {
-    align-self: flex-start;
+.resource-meta-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.resource-header .resource-category,
+.resource-header .resource-language {
+    color: white;
+    margin-bottom: 0;
+    padding: 4px 10px;
+    font-size: 0.8em;
+    border-radius: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .resource-header .resource-language {
-    color: white;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.25);
 }
+
+/* Category colors */
+.resource-header .resource-category.cat-podcast { background: rgba(156, 39, 176, 0.75); }
+.resource-header .resource-category.cat-video { background: rgba(244, 67, 54, 0.75); }
+.resource-header .resource-category.cat-article { background: rgba(33, 150, 243, 0.75); }
+.resource-header .resource-category.cat-course { background: rgba(255, 152, 0, 0.75); }
+.resource-header .resource-category.cat-trainer { background: rgba(76, 175, 80, 0.75); }
+.resource-header .resource-category.cat-shop { background: rgba(0, 188, 212, 0.75); }
+.resource-header .resource-category.cat-other { background: rgba(158, 158, 158, 0.75); }
 
 .resource-content {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.resource-desc {
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.resource-desc:hover {
+    color: #2c5f2d;
+}
+
+.resource-desc.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+}
+
+.resource-card {
+    display: flex;
+    flex-direction: column;
 }
 
 .resource-card.hidden {
@@ -172,7 +237,7 @@ header h1 {
     font-size: 1.4em;
 }
 
-.resource-card p {
+.resource-desc {
     color: #666;
     margin-bottom: 15px;
 }

@@ -88,18 +88,26 @@ function createResourceCard(resource) {
     card.innerHTML = `
         <div class="resource-header ${hasImageClass}" style="${imageStyle}">
             <div class="resource-header-overlay">
-                <span class="resource-category">${categoryLabel}</span>
                 <h3>${resource.title}</h3>
-                <span class="resource-language">${flag} ${resource.language}</span>
+                <div class="resource-meta-row">
+                    <span class="resource-category cat-${resource.category}">${categoryLabel}</span>
+                    <span class="resource-language">${flag} ${resource.language}</span>
+                </div>
             </div>
         </div>
         <div class="resource-content">
-            <p>${resource.description}</p>
+            <p class="resource-desc">${resource.description}</p>
             <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
                 Avaa resurssi →
             </a>
         </div>
     `;
+
+    // Click to expand description
+    const desc = card.querySelector('.resource-desc');
+    desc.addEventListener('click', function() {
+        this.classList.toggle('expanded');
+    });
 
     return card;
 }
