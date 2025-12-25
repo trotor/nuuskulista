@@ -210,13 +210,13 @@
 
             <!-- Tabs (only shown for new resources) -->
             <div id="add-tabs" class="tabs">
-                <button class="tab active" onclick="switchTab('form')">📝 Lomake</button>
-                <button class="tab" onclick="switchTab('url')">🔗 URL</button>
+                <button class="tab" onclick="switchTab('form')">📝 Lomake</button>
+                <button class="tab active" onclick="switchTab('url')">🔗 URL</button>
                 <button class="tab" onclick="switchTab('json')">{ } JSON</button>
             </div>
 
             <!-- Tab 1: Form -->
-            <div id="tab-form" class="tab-content active">
+            <div id="tab-form" class="tab-content">
                 <form id="resource-form">
                     <input type="hidden" id="edit-index" value="-1">
 
@@ -266,7 +266,7 @@
             </div>
 
             <!-- Tab 2: URL fetch -->
-            <div id="tab-url" class="tab-content">
+            <div id="tab-url" class="tab-content active">
                 <div class="form-group">
                     <label>Syötä URL</label>
                     <div class="url-input-group">
@@ -449,8 +449,9 @@
             document.getElementById('fetch-url').value = '';
             document.getElementById('fetch-result').style.display = 'none';
             document.getElementById('json-input').value = '';
-            switchTab('form');
+            switchTab('url');
             document.getElementById('edit-modal').classList.add('active');
+            document.getElementById('fetch-url').focus();
         }
 
         function openEditModal(index) {
