@@ -164,6 +164,14 @@ footer p {
     margin: 5px 0;
 }
 
+footer a {
+    color: #97bc62;
+}
+
+footer a:hover {
+    color: #b8d88a;
+}
+
 .help-link {
     background: none;
     border: none;
