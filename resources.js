@@ -5,6 +5,22 @@ const lastUpdated = "25.12.2025";
 
 const resources = [
     {
+        title: "Suomen sileäkarvaiset noutajat ry",
+        description: "Sivusto esittelee Suomen sileäkarvaiset noutajat ry:n toimintaa, rotua ja sen edistämistä. Yhdistys tarjoaa tietoa tapahtumista, kasvattajista ja pentuvälityksestä.",
+        category: "other",
+        language: "Suomi",
+        url: "https://www.flatti.net/",
+        image: "https://bin.yhdistysavain.fi/1591588/9cgAcGsRA4ZtmSblCUi60_e-zt/sskn%20logo%20240x240.png"
+    },
+    {
+        title: "Flattiviesti NOME-Extra 2023",
+        description: "PDF-dokumentti, joka sisältää todella kattavan paketin nometietoutta.",
+        category: "book",
+        language: "Suomi",
+        url: "https://bin.yhdistysavain.fi/1591588/vVmZRnbOpvW2cyyQV2m00_Sn71/Flattiviesti%20NOME-Extra%202023.pdf",
+        image: "https://www.google.com/s2/favicons?domain=bin.yhdistysavain.fi&sz=128"
+    },
+    {
         title: "Laura Hill: Advanced Retriever Training",
         description: "Kirja tarjoaa kattavan lähestymistavan noutajakoirien koulutukseen ja elämiseen, keskittyen kilpailutason saavuttamiseen ja koulutuskäytäntöjen parantamiseen.",
         category: "book",
