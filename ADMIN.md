@@ -33,6 +33,26 @@ Kolme tapaa lisätä resursseja:
 
 Muista klikata **💾 Tallenna** tallentaaksesi muutokset tiedostoon.
 
+### URL-haun toiminta (AI)
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│   Selain     │     │   server.js  │     │   OpenAI     │
+│              │     │              │     │   API        │
+│  Syötä URL   │────▶│  Hae sivu    │────▶│  Analysoi    │
+│              │     │  (fetch)     │     │  (gpt-4o-    │
+│  Esikatselu  │◀────│  Parsii HTML │◀────│   mini)      │
+│              │     │  (cheerio)   │     │              │
+└──────────────┘     └──────────────┘     └──────────────┘
+```
+
+1. Syötät URL:n admin-sivulla
+2. Backend hakee sivun ja parsii tekstisisällön
+3. OpenAI generoi otsikon, kuvauksen, kategorian ja kielen
+4. Tarkistat tuloksen ja lisäät resurssin
+
+---
+
 ### Muutosten julkaisu
 
 ```bash
