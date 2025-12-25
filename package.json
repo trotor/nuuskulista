@@ -1,6 +1,10 @@
 {
   "name": "nuuskulista",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trotor/nuuskulista"
+  },
   "description": "Noutaja-aiheisia materiaaleja netissä",
   "scripts": {
     "admin": "node server.js"

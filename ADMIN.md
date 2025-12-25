@@ -103,3 +103,92 @@ Issue sulkeutuu automaattisesti ja sivusto päivittyy.
 
 **Kielet:**
 - `Suomi`, `Englanti`, `Ruotsi`, `Saksa`
+
+---
+
+## Oma käyttöönotto (Fork)
+
+Voit ottaa tämän projektin pohjaksi omalle resurssilistasivstolle.
+
+### Vaihe 1: Forkkaa projekti
+
+1. Mene osoitteeseen https://github.com/trotor/nuuskulista
+2. Klikkaa **Fork** -nappia oikeassa yläkulmassa
+3. Valitse oma GitHub-tilisi
+4. Nyt sinulla on kopio: `https://github.com/SINUN-KÄYTTÄJÄ/nuuskulista`
+
+### Vaihe 2: Aktivoi GitHub Pages
+
+1. Mene forkkaamasi repon **Settings** → **Pages**
+2. **Source**: valitse **Deploy from a branch**
+3. **Branch**: valitse **main** ja **/ (root)**
+4. Klikkaa **Save**
+5. Odota 1-2 minuuttia, sivusto on osoitteessa:
+   `https://SINUN-KÄYTTÄJÄ.github.io/nuuskulista/`
+
+### Vaihe 3: Mukauta sisältö
+
+Muokkaa nämä tiedostot omaan käyttöösi:
+
+| Tiedosto | Mitä muuttaa |
+|----------|--------------|
+| `index.html` | Otsikko, kuvaus, tekijätiedot |
+| `styles.css` | Värit (etsi `#2c5f2d` ja `#97bc62`) |
+| `resources.js` | Tyhjennä esimerkit, lisää omat resurssit |
+| `README.md` | Oma kuvaus ja linkit |
+
+### Vaihe 4: Kloonaa ja käytä hallintasivua
+
+```bash
+git clone https://github.com/SINUN-KÄYTTÄJÄ/nuuskulista.git
+cd nuuskulista
+npm install
+```
+
+Luo `.env`-tiedosto (kopioi `.env.example`):
+```
+OPENAI_API_KEY=sk-xxx
+```
+
+Käynnistä hallintasivu:
+```bash
+npm run admin
+```
+
+---
+
+## Päivitysten hakeminen alkuperäisestä
+
+Kun alkuperäiseen projektiin tulee päivityksiä, voit hakea ne omaan forkkiisi:
+
+### Ensimmäisellä kerralla: lisää upstream
+
+```bash
+git remote add upstream https://github.com/trotor/nuuskulista.git
+```
+
+### Päivitysten hakeminen
+
+```bash
+git fetch upstream
+git merge upstream/main
+```
+
+Jos tulee konflikteja, ratkaise ne ja commitoi:
+```bash
+git add .
+git commit -m "Yhdistetty päivitykset upstreamista"
+git push
+```
+
+### Tarkista versio
+
+Nykyinen versio näkyy tiedostossa `VERSION` ja `package.json`.
+
+---
+
+## Versiohistoria
+
+| Versio | Päivämäärä | Muutokset |
+|--------|------------|-----------|
+| 1.0.0 | 25.12.2024 | Ensimmäinen julkaisu |
