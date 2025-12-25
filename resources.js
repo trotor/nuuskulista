@@ -5,12 +5,140 @@ const lastUpdated = "25.12.2025";
 
 const resources = [
     {
+        title: "Laura Hill: Advanced Retriever Training",
+        description: "Kirja tarjoaa kattavan lähestymistavan noutajakoirien koulutukseen ja elämiseen, keskittyen kilpailutason saavuttamiseen ja koulutuskäytäntöjen parantamiseen.",
+        category: "book",
+        language: "Englanti",
+        url: "https://www.adlibris.com/fi/kirja/advanced-retriever-training-9781785007552?utm_source=google&utm_medium=cpc&utm_campaign=AR-FI:%20BOK%20-%20pMAX%20-%20Generic%20-%20B%C3%B6cker%20ENG&gad_source=1&gad_campaignid=17349021347&gbraid=0AAAAAD7w-P-qqd6hCgG8kVsX4bg6GAGAa&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQKFZlRrewkaQZ9hzeV89c_iQCi0oJIQcJ7AzaZtsaR6GiycF48YDgRoC4U0QAvD_BwE",
+        image: "https://www.adlibris.com/images/9781785007552/advanced-retriever-training.jpg"
+    },
+    {
+        title: "Jyry Tuominen: Noutajan pennusta metsästyskoiraksi",
+        description: "Jyry Tuomisen erinomainen teos noutajan kouluttamisesta. Uusi painos ilmestynyt 2025 vuoden lopussa.",
+        category: "book",
+        language: "Suomi",
+        url: "https://www.snj.fi/snj/tarvikemyynti/painotuotteet/",
+        image: "https://bin.yhdistysavain.fi/1560643/bsgRCwNwcPp10khi8VUR0XiNPL/Noutajan%20pennusta%20mets%C3%A4styskoiraksi_kannet.jpg"
+    },
+    {
+        title: "Kauppa - Metsäkulman eläinpalvelut",
+        description: "Verkkokauppa, joka tarjoaa laajan valikoiman tuotteita koirille ja muille eläimille, mukaan lukien joulutarjoukset ja uutuudet.",
+        category: "shop",
+        language: "Suomi",
+        url: "https://metsakulman.com/kauppa/",
+        image: "https://metsakulman.com/wp-content/uploads/2019/09/69708584_417421082215704_2090182410539892736_o.jpg"
+    },
+    {
+        title: "Noutajatukku",
+        description: "Noutajatukku tarjoaa laadukkaita tarvikkeita metsästyskoirien noutoharjoituksiin, kuten ACME pillit ja Firedog damit.",
+        category: "shop",
+        language: "Suomi",
+        url: "https://www.noutajatukku.fi/",
+        image: "https://primary.jwwb.nl/public/i/r/b/temp-ehjvdbyffezrccdrzrsz/lilli-and-orange-2-inc-water-dummy-high.jpg?enable-io=true&enable=upscale&fit=bounds&width=1200"
+    },
+    {
+        title: "Damikauppa",
+        description: "Damikauppa tarjoaa laajan valikoiman dummytuotteita, koiran leluja ja koulutusmateriaaleja, kuten pentupaketteja ja kaninvinkuja. Verkkokauppa keskittyy eettisiin ja laadukkaisiin koiratarvikkeisiin.",
+        category: "shop",
+        language: "Suomi",
+        url: "https://www.damikauppa.fi/",
+        image: "https://www.damikauppa.fi/tuotekuvat/1500x1500/damikauppa-logo_ilman-taustaa-iso.png"
+    },
+    {
+        title: "Noutajakauppa",
+        description: "Noutajakauppa tarjoaa laajan valikoiman noutajiin ja niiden ohjaajiin liittyviä varusteita sekä koulutustarvikkeita. Verkkokaupassa on myös jouluale ja erilaisia tarjouksia.",
+        category: "shop",
+        language: "Suomi",
+        url: "https://www.noutajakauppa.fi/",
+        image: "https://www.noutajakauppa.fi/wp-content/uploads/2025/10/4FAFB233-1368-4D6D-B430-1A3032A13055.jpeg"
+    },
+    {
+        title: "Noutavan koiran koulutusta",
+        description: "Tarjoaa käytännön NOME-koulutuksia noutajille Kemiönsaarella, hyödyntäen palkitsemiseen perustuvaa menetelmää. Koulutukset tukevat koiran lajityypillistä käyttäytymistä ja tarjoavat mahdollisuuksia kehittää yhteistyötä omistajan kanssa.",
+        category: "course",
+        language: "Suomi",
+        url: "https://www.scentalertdogs.fi/noutavan-koiran-koulutusta",
+        image: "https://www.google.com/s2/favicons?domain=www.scentalertdogs.fi&sz=128"
+    },
+    {
+        title: "NettiNoutaja",
+        description: "NettiNoutaja tarjoaa verkkokursseja noutajakoirien kouluttamiseen palkitsemiseen perustuvin menetelmin. Kurssit sisältävät kattavaa teoriaa ja käytännön tukea.",
+        category: "course",
+        language: "Suomi",
+        url: "https://www.nettinoutaja.fi/",
+        image: "https://www.google.com/s2/favicons?domain=www.nettinoutaja.fi&sz=128"
+    },
+    {
+        title: "Elite Training - Raine Rantanen Oy",
+        description: "Elite training tarjoaa noutajien koulutusta kokemuksella ja ammattitaidolla, mukaan lukien yksityistunteja ja kursseja metsästyksestä koeharrastuksiin.",
+        category: "trainer",
+        language: "Suomi",
+        url: "https://www.rrantanen.fi/elite-training/",
+        image: "https://www.rrantanen.fi/wp-content/uploads/2024/06/Logo_uusitausta.png"
+    },
+    {
+        title: "Noutajakoulu Murcas - Facebook",
+        description: "Noutajakoulutusta",
+        category: "trainer",
+        language: "Suomi",
+        url: "https://www.facebook.com/Noutajakoulu/",
+        image: ""
+    },
+    {
+        title: "Eräloimu - Noutajien koulutus",
+        description: "Eräloimu tarjoaa metsästyskoirien ja noutajien koulutusta sekä eräruokapalveluita ja virkistyspäiviä luonnossa.",
+        category: "trainer",
+        language: "Suomi",
+        url: "https://www.eraloimu.fi/",
+        image: "https://4788d471d0.clvaw-cdnwnd.com/6fa6be95546afcdadc093b99d6646cf2/200000073-5ad835ad85/700/Er%C3%A4loimu_vaaka_turkoosi_ei%20taustaa.png?ph=4788d471d0"
+    },
+    {
+        title: "Katin Koirakoulu",
+        description: "Katin Koirakoulu tarjoaa koulutusta metsästyskoirille, erityisesti noutajille, sekä ryhmä- että yksityisopetusta. Koulutukset keskittyvät metsästyskokeisiin ja noutajien taitojen kehittämiseen.",
+        category: "trainer",
+        language: "Suomi",
+        url: "https://www.katinkoirakoulu.com/",
+        image: "https://www.katinkoirakoulu.com/uploads/1/0/7/9/107943037/mynamaen-koirakesku_orig.jpg"
+    },
+    {
+        title: "Suomen Noutajakoirajärjestö ry",
+        description: "Suomen Noutajakoirajärjestö ry (SNJ) on valtakunnallinen organisaatio, joka edistää noutajien käyttötarkoitusta ja arvostusta. Järjestö tarjoaa koulutus- ja harrastusmahdollisuuksia noutajaharrastajille.",
+        category: "other",
+        language: "Suomi",
+        url: "https://www.snj.fi/",
+        image: "https://bin.yhdistysavain.fi/1560643/ukhWTGWd4pYAuoi1qjOt0d4ReA/SNJ_Monipuolinen-noutaja-naytos_2025.png"
+    },
+    {
+        title: "Villilä Luonto",
+        description: "Villilä Luonto tarjoaa ainutlaatuisia kokemuksia ja koulutuspalveluja noutajakoirille kauniissa maalaismiljöössä. Koulutukset ja asiantuntijapalvelut keskittyvät luonnonvara-alaan ja koirankoulutukseen.",
+        category: "trainer",
+        language: "Suomi",
+        url: "https://villila.net/",
+        image: "https://villila.net/wp-content/uploads/2020/06/dac72e1c-18ca-4d46-9f70-d3483bdee21d.jpeg"
+    },
+    {
+        title: "Noutajien koulutus",
+        description: "Koirakoulu Kompassi tarjoaa koulutusta noutajarotuisille koirille rodunomaisiin lajeihin, kuten noutamiseen ja tottelevaisuuteen. Kurssit ovat suunniteltu eri ikäisille koirille ja sisältävät myös omatoimitreenimahdollisuuksia.",
+        category: "course",
+        language: "Suomi",
+        url: "https://www.koirakoulukompassi.com/categories/noutajat",
+        image: "https://www.koirakoulukompassi.com/fi/tiedostot/4930?variant=medium"
+    },
+    {
+        title: "Noutajien koulutus - Facebook ryhmä",
+        description: "Facebook ryhmä noutajien koulutuksesta kiinnostuneille.",
+        category: "other",
+        language: "Suomi",
+        url: "https://www.facebook.com/groups/noutajienkoulutus/",
+        image: ""
+    },
+    {
         title: "THE DOG HOUSE with Adam & Jimmy",
         description: "Podcast, jossa Adam Campbell ja Jimmy Rodgers keskustelevat noutajakoirien koulutuksesta ja metsästyksestä vieraidensa kanssa.",
         category: "podcast",
         language: "Englanti",
         url: "https://podcasts.apple.com/fi/podcast/the-dog-house-with-adam-jimmy/id1551009162",
-        image: "https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/4e/15/69/4e156992-0254-0efb-b164-ebcc820434f1/mza_16165731168018148821.jpg/1200x1200bf-60.jpg"
+        image: ""
     },
     {
         title: "Jaana Tala - YouTube",

@@ -85,6 +85,11 @@ function createResourceCard(resource) {
     const imageStyle = resource.image ? `background-image: url('${resource.image}')` : '';
     const hasImageClass = resource.image ? 'has-image' : 'no-image';
 
+    // Build link HTML only if URL exists
+    const linkHtml = resource.url
+        ? `<a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">Avaa resurssi →</a>`
+        : '';
+
     card.innerHTML = `
         <div class="resource-header ${hasImageClass}" style="${imageStyle}">
             <div class="resource-header-overlay">
@@ -97,9 +102,7 @@ function createResourceCard(resource) {
         </div>
         <div class="resource-content">
             <p class="resource-desc">${resource.description}</p>
-            <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
-                Avaa resurssi →
-            </a>
+            ${linkHtml}
         </div>
     `;
 
@@ -130,6 +133,7 @@ function getCategoryLabel(category) {
         'course': 'Kurssi',
         'trainer': 'Kouluttaja',
         'shop': 'Verkkokauppa',
+        'book': 'Kirja',
         'other': 'Muu'
     };
     return labels[category] || category;

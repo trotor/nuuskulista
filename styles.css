@@ -90,6 +90,7 @@ header h1 {
 .filter-btn.cat-trainer.active { background: rgba(76, 175, 80, 0.9); border-color: rgba(76, 175, 80, 0.9); color: white; }
 .filter-btn.cat-shop.active { background: rgba(0, 188, 212, 0.9); border-color: rgba(0, 188, 212, 0.9); color: white; }
 .filter-btn.cat-other.active { background: rgba(158, 158, 158, 0.9); border-color: rgba(158, 158, 158, 0.9); color: white; }
+.filter-btn.cat-book.active { background: rgba(121, 85, 72, 0.9); border-color: rgba(121, 85, 72, 0.9); color: white; }
 
 .filter-btn.cat-podcast { border-color: rgb(156, 39, 176); color: rgb(156, 39, 176); }
 .filter-btn.cat-video { border-color: rgb(244, 67, 54); color: rgb(244, 67, 54); }
@@ -97,6 +98,7 @@ header h1 {
 .filter-btn.cat-course { border-color: rgb(255, 152, 0); color: rgb(255, 152, 0); }
 .filter-btn.cat-trainer { border-color: rgb(76, 175, 80); color: rgb(76, 175, 80); }
 .filter-btn.cat-shop { border-color: rgb(0, 188, 212); color: rgb(0, 188, 212); }
+.filter-btn.cat-book { border-color: rgb(121, 85, 72); color: rgb(121, 85, 72); }
 .filter-btn.cat-other { border-color: rgb(158, 158, 158); color: rgb(158, 158, 158); }
 
 #resources-container {
@@ -182,6 +184,7 @@ header h1 {
 .resource-header .resource-category.cat-course { background: rgba(255, 152, 0, 0.75); }
 .resource-header .resource-category.cat-trainer { background: rgba(76, 175, 80, 0.75); }
 .resource-header .resource-category.cat-shop { background: rgba(0, 188, 212, 0.75); }
+.resource-header .resource-category.cat-book { background: rgba(121, 85, 72, 0.75); }
 .resource-header .resource-category.cat-other { background: rgba(158, 158, 158, 0.75); }
 
 .resource-content {
