@@ -7,15 +7,24 @@ Node.js-pohjainen hallintasivu resurssien hallintaan.
 ### Käynnistys
 
 ```bash
-npm install        # Ensimmäisellä kerralla
-npm run admin      # Käynnistä palvelin
+npm install                        # Ensimmäisellä kerralla
+OPENAI_API_KEY=xxx npm run admin   # Käynnistä palvelin (URL-haku vaatii avaimen)
 ```
 
 Avaa http://localhost:3000/admin.html
 
-### Toiminnot
+### Resurssien lisääminen
 
-- **➕ Lisää uusi** - lisää uusi resurssi
+Kolme tapaa lisätä resursseja:
+
+| Tapa | Kuvaus |
+|------|--------|
+| **📝 Lomake** | Täytä kentät manuaalisesti |
+| **🔗 URL** | Syötä linkki, LLM generoi otsikon ja kuvauksen automaattisesti |
+| **{ } JSON** | Liitä yksi tai useampi resurssi JSON-muodossa |
+
+### Muut toiminnot
+
 - **Klikkaa resurssin nimeä** - muokkaa resurssia
 - **🔗** - avaa linkin selaimessa
 - **✏️** - muokkaa resurssia

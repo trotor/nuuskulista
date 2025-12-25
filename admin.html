@@ -35,8 +35,6 @@
         .btn-secondary:hover { background: #5a6268; }
         .btn-success { background: #28a745; color: white; }
         .btn-success:hover { background: #218838; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-danger:hover { background: #c82333; }
         .count { margin-left: auto; color: #666; }
         .status {
             padding: 8px 15px;
@@ -60,26 +58,11 @@
             border-bottom: 1px solid #eee;
         }
         .resource-item:last-child { border-bottom: none; }
-        .resource-item.dragging {
-            opacity: 0.5;
-            background: #e8f5e9;
-        }
-        .resource-item.drag-over {
-            border-top: 3px solid #2c5f2d;
-        }
-        .drag-handle {
-            color: #999;
-            font-size: 20px;
-            cursor: grab;
-        }
-        .resource-info {
-            flex: 1;
-            cursor: pointer;
-        }
-        .resource-info:hover .resource-title {
-            color: #1f4420;
-            text-decoration: underline;
-        }
+        .resource-item.dragging { opacity: 0.5; background: #e8f5e9; }
+        .resource-item.drag-over { border-top: 3px solid #2c5f2d; }
+        .drag-handle { color: #999; font-size: 20px; cursor: grab; }
+        .resource-info { flex: 1; cursor: pointer; }
+        .resource-info:hover .resource-title { color: #1f4420; text-decoration: underline; }
         .resource-title { font-weight: 600; color: #2c5f2d; }
         .resource-desc { font-size: 13px; color: #666; margin-top: 4px; }
         .resource-meta { font-size: 12px; color: #666; margin-top: 4px; }
@@ -90,10 +73,7 @@
             border-radius: 10px;
             margin-right: 5px;
         }
-        .resource-actions {
-            display: flex;
-            gap: 5px;
-        }
+        .resource-actions { display: flex; gap: 5px; }
         .action-btn {
             background: none;
             border: none;
@@ -107,12 +87,7 @@
         .action-btn.open { color: #007bff; }
         .action-btn.edit { color: #28a745; }
         .action-btn.delete { color: #dc3545; }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
+        .loading { text-align: center; padding: 40px; color: #666; }
 
         /* Modal */
         .modal {
@@ -130,18 +105,40 @@
             background: white;
             padding: 25px;
             border-radius: 10px;
-            max-width: 600px;
+            max-width: 650px;
             width: 90%;
             max-height: 90vh;
             overflow: auto;
         }
-        .modal-content h2 {
-            color: #2c5f2d;
+        .modal-content h2 { color: #2c5f2d; margin-bottom: 20px; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
             margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
         }
-        .form-group {
-            margin-bottom: 15px;
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
         }
+        .tab:hover { color: #2c5f2d; }
+        .tab.active {
+            color: #2c5f2d;
+            border-bottom-color: #2c5f2d;
+            font-weight: 600;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .form-group { margin-bottom: 15px; }
         .form-group label {
             display: block;
             font-weight: 600;
@@ -158,16 +155,21 @@
             font-size: 14px;
             font-family: inherit;
         }
-        .form-group textarea {
-            height: 80px;
-            resize: vertical;
-        }
+        .form-group textarea { height: 80px; resize: vertical; }
+        .form-group textarea.json-input { height: 150px; font-family: monospace; font-size: 12px; }
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #2c5f2d;
         }
+        .url-input-group {
+            display: flex;
+            gap: 10px;
+        }
+        .url-input-group input { flex: 1; }
+        .url-input-group button { white-space: nowrap; }
+
         .modal-buttons {
             margin-top: 20px;
             display: flex;
@@ -181,6 +183,9 @@
             cursor: pointer;
             font-size: 14px;
         }
+        .hint { font-size: 12px; color: #666; margin-top: 5px; }
+        .spinner { display: inline-block; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -198,60 +203,115 @@
         <div class="loading">Ladataan...</div>
     </div>
 
-    <!-- Edit/Add Modal -->
+    <!-- Add/Edit Modal -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
-            <h2 id="modal-title">Muokkaa resurssia</h2>
-            <form id="resource-form">
-                <input type="hidden" id="edit-index" value="-1">
+            <h2 id="modal-title">Lisää uusi resurssi</h2>
 
+            <!-- Tabs (only shown for new resources) -->
+            <div id="add-tabs" class="tabs">
+                <button class="tab active" onclick="switchTab('form')">📝 Lomake</button>
+                <button class="tab" onclick="switchTab('url')">🔗 URL</button>
+                <button class="tab" onclick="switchTab('json')">{ } JSON</button>
+            </div>
+
+            <!-- Tab 1: Form -->
+            <div id="tab-form" class="tab-content active">
+                <form id="resource-form">
+                    <input type="hidden" id="edit-index" value="-1">
+
+                    <div class="form-group">
+                        <label for="edit-title">Nimi *</label>
+                        <input type="text" id="edit-title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-description">Kuvaus *</label>
+                        <textarea id="edit-description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-category">Kategoria *</label>
+                        <select id="edit-category" required>
+                            <option value="podcast">Podcast</option>
+                            <option value="video">Video</option>
+                            <option value="article">Artikkeli</option>
+                            <option value="course">Kurssi</option>
+                            <option value="other">Muu</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-language">Kieli *</label>
+                        <select id="edit-language" required>
+                            <option value="Suomi">Suomi</option>
+                            <option value="Englanti">Englanti</option>
+                            <option value="Ruotsi">Ruotsi</option>
+                            <option value="Saksa">Saksa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-url">Linkki *</label>
+                        <input type="url" id="edit-url" required placeholder="https://...">
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Peruuta</button>
+                        <button type="submit" class="btn-primary">Tallenna</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab 2: URL fetch -->
+            <div id="tab-url" class="tab-content">
                 <div class="form-group">
-                    <label for="edit-title">Nimi *</label>
-                    <input type="text" id="edit-title" required>
+                    <label>Syötä URL</label>
+                    <div class="url-input-group">
+                        <input type="url" id="fetch-url" placeholder="https://...">
+                        <button type="button" class="btn-primary" onclick="fetchFromUrl()">
+                            <span id="fetch-btn-text">🔍 Hae tiedot</span>
+                        </button>
+                    </div>
+                    <p class="hint">LLM hakee sivun ja generoi otsikon, kuvauksen ja kategorian automaattisesti.</p>
                 </div>
+                <div id="fetch-result" style="display:none;">
+                    <div class="form-group">
+                        <label>Esikatselu</label>
+                        <div id="fetch-preview" style="background:#f5f5f5; padding:15px; border-radius:5px;"></div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Peruuta</button>
+                        <button type="button" class="btn-success" onclick="addFetchedResource()">➕ Lisää resurssi</button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Tab 3: JSON -->
+            <div id="tab-json" class="tab-content">
                 <div class="form-group">
-                    <label for="edit-description">Kuvaus *</label>
-                    <textarea id="edit-description" required></textarea>
+                    <label>Liitä JSON</label>
+                    <textarea id="json-input" class="json-input" placeholder='{
+    "title": "Resurssin nimi",
+    "description": "Kuvaus",
+    "category": "article",
+    "language": "Suomi",
+    "url": "https://..."
+}'></textarea>
+                    <p class="hint">Voit liittää yhden resurssin tai taulukon useita resursseja.</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="edit-category">Kategoria *</label>
-                    <select id="edit-category" required>
-                        <option value="podcast">Podcast</option>
-                        <option value="video">Video</option>
-                        <option value="article">Artikkeli</option>
-                        <option value="course">Kurssi</option>
-                        <option value="other">Muu</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="edit-language">Kieli *</label>
-                    <select id="edit-language" required>
-                        <option value="Suomi">Suomi</option>
-                        <option value="Englanti">Englanti</option>
-                        <option value="Ruotsi">Ruotsi</option>
-                        <option value="Saksa">Saksa</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="edit-url">Linkki *</label>
-                    <input type="url" id="edit-url" required placeholder="https://...">
-                </div>
-
                 <div class="modal-buttons">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Peruuta</button>
-                    <button type="submit" class="btn-primary">Tallenna</button>
+                    <button type="button" class="btn-success" onclick="addFromJson()">➕ Lisää resurssi(t)</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
     <script>
         let currentResources = [];
         let draggedItem = null;
+        let fetchedResource = null;
 
         async function loadResources() {
             try {
@@ -320,10 +380,6 @@
                     </div>
                 `;
 
-                // Drag events on handle only
-                const handle = item.querySelector('.drag-handle');
-                handle.addEventListener('mousedown', () => item.draggable = true);
-
                 item.addEventListener('dragstart', handleDragStart);
                 item.addEventListener('dragend', handleDragEnd);
                 item.addEventListener('dragover', handleDragOver);
@@ -340,38 +396,24 @@
             return str.length > len ? str.substring(0, len) + '...' : str;
         }
 
-        function handleDragStart(e) {
-            draggedItem = this;
-            this.classList.add('dragging');
-        }
-
+        // Drag & drop handlers
+        function handleDragStart(e) { draggedItem = this; this.classList.add('dragging'); }
         function handleDragEnd(e) {
             this.classList.remove('dragging');
-            document.querySelectorAll('.resource-item').forEach(item => {
-                item.classList.remove('drag-over');
-            });
+            document.querySelectorAll('.resource-item').forEach(item => item.classList.remove('drag-over'));
         }
-
         function handleDragOver(e) {
             e.preventDefault();
-            if (this !== draggedItem) {
-                this.classList.add('drag-over');
-            }
+            if (this !== draggedItem) this.classList.add('drag-over');
         }
-
-        function handleDragLeave(e) {
-            this.classList.remove('drag-over');
-        }
-
+        function handleDragLeave(e) { this.classList.remove('drag-over'); }
         function handleDrop(e) {
             e.preventDefault();
             if (this !== draggedItem) {
                 const fromIndex = parseInt(draggedItem.dataset.index);
                 const toIndex = parseInt(this.dataset.index);
-
                 const item = currentResources.splice(fromIndex, 1)[0];
                 currentResources.splice(toIndex, 0, item);
-
                 render();
             }
         }
@@ -384,22 +426,36 @@
             }
         }
 
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
         // Modal functions
         function openAddModal() {
             document.getElementById('modal-title').textContent = 'Lisää uusi resurssi';
+            document.getElementById('add-tabs').style.display = 'flex';
             document.getElementById('edit-index').value = -1;
             document.getElementById('edit-title').value = '';
             document.getElementById('edit-description').value = '';
             document.getElementById('edit-category').value = 'article';
             document.getElementById('edit-language').value = 'Suomi';
             document.getElementById('edit-url').value = '';
+            document.getElementById('fetch-url').value = '';
+            document.getElementById('fetch-result').style.display = 'none';
+            document.getElementById('json-input').value = '';
+            switchTab('form');
             document.getElementById('edit-modal').classList.add('active');
-            document.getElementById('edit-title').focus();
         }
 
         function openEditModal(index) {
             const resource = currentResources[index];
             document.getElementById('modal-title').textContent = 'Muokkaa resurssia';
+            document.getElementById('add-tabs').style.display = 'none';
+            switchTab('form');
             document.getElementById('edit-index').value = index;
             document.getElementById('edit-title').value = resource.title;
             document.getElementById('edit-description').value = resource.description;
@@ -407,16 +463,15 @@
             document.getElementById('edit-language').value = resource.language;
             document.getElementById('edit-url').value = resource.url;
             document.getElementById('edit-modal').classList.add('active');
-            document.getElementById('edit-title').focus();
         }
 
         function closeModal() {
             document.getElementById('edit-modal').classList.remove('active');
         }
 
+        // Form submit
         document.getElementById('resource-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const index = parseInt(document.getElementById('edit-index').value);
             const resource = {
                 title: document.getElementById('edit-title').value.trim(),
@@ -427,11 +482,9 @@
             };
 
             if (index === -1) {
-                // Add new
                 currentResources.unshift(resource);
                 showStatus('Resurssi lisätty!', 'success');
             } else {
-                // Update existing
                 currentResources[index] = resource;
                 showStatus('Resurssi päivitetty!', 'success');
             }
@@ -440,15 +493,95 @@
             render();
         });
 
-        // Close modal on escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+        // URL fetch
+        async function fetchFromUrl() {
+            const url = document.getElementById('fetch-url').value.trim();
+            if (!url) {
+                alert('Syötä URL ensin');
+                return;
+            }
 
-        // Close modal on backdrop click
-        document.getElementById('edit-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+            const btn = document.getElementById('fetch-btn-text');
+            btn.innerHTML = '<span class="spinner">⏳</span> Haetaan...';
+
+            try {
+                const res = await fetch('/api/fetch-resource', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+
+                if (data.error) {
+                    alert('Virhe: ' + data.error);
+                    btn.textContent = '🔍 Hae tiedot';
+                    return;
+                }
+
+                fetchedResource = data;
+                const flag = getFlag(data.language);
+                document.getElementById('fetch-preview').innerHTML = `
+                    <strong>${data.title}</strong><br>
+                    <small>${getCategoryLabel(data.category)} · ${flag} ${data.language}</small><br><br>
+                    ${data.description}<br><br>
+                    <a href="${data.url}" target="_blank">${data.url}</a>
+                `;
+                document.getElementById('fetch-result').style.display = 'block';
+                btn.textContent = '🔍 Hae tiedot';
+
+            } catch (err) {
+                alert('Virhe: ' + err.message);
+                btn.textContent = '🔍 Hae tiedot';
+            }
+        }
+
+        function addFetchedResource() {
+            if (fetchedResource) {
+                currentResources.unshift(fetchedResource);
+                showStatus('Resurssi lisätty!', 'success');
+                closeModal();
+                render();
+            }
+        }
+
+        // JSON import
+        function addFromJson() {
+            const jsonText = document.getElementById('json-input').value.trim();
+            if (!jsonText) {
+                alert('Liitä JSON ensin');
+                return;
+            }
+
+            try {
+                let data = JSON.parse(jsonText);
+
+                // Handle single object or array
+                if (!Array.isArray(data)) {
+                    data = [data];
+                }
+
+                // Validate
+                for (const r of data) {
+                    if (!r.title || !r.description || !r.category || !r.language || !r.url) {
+                        alert('JSON puuttuu pakollisia kenttiä (title, description, category, language, url)');
+                        return;
+                    }
+                }
+
+                // Add all
+                currentResources = [...data, ...currentResources];
+                showStatus(`${data.length} resurssi(a) lisätty!`, 'success');
+                closeModal();
+                render();
+
+            } catch (err) {
+                alert('Virheellinen JSON: ' + err.message);
+            }
+        }
+
+        // Close modal on escape/backdrop
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        document.getElementById('edit-modal').addEventListener('click', e => { if (e.target.classList.contains('modal')) closeModal(); });
 
         function getFlag(language) {
             const flags = { 'Suomi': '🇫🇮', 'Englanti': '🇬🇧', 'Saksa': '🇩🇪', 'Ruotsi': '🇸🇪' };
