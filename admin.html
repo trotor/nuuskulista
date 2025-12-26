@@ -103,6 +103,8 @@
         .action-btn.open { color: #007bff; }
         .action-btn.edit { color: #28a745; }
         .action-btn.delete { color: #dc3545; }
+        .action-btn.featured { color: #ccc; }
+        .action-btn.featured.active { color: #ffc107; }
         .loading { text-align: center; padding: 40px; color: #666; }
 
         /* Modal */
@@ -205,7 +207,10 @@
     </style>
 </head>
 <body>
-    <h1>🐕 Nuuskulista - Hallinta</h1>
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+        <h1 style="margin: 0;">🐕 Nuuskulista - Hallinta</h1>
+        <span id="version" style="color: #888; font-size: 14px;"></span>
+    </div>
 
     <div class="toolbar">
         <button class="btn-success" onclick="openAddModal()">➕ Lisää uusi</button>
@@ -406,6 +411,7 @@
                         </div>
                     </div>
                     <div class="resource-actions">
+                        <button class="action-btn featured ${resource.featured ? 'active' : ''}" onclick="toggleFeatured(${index})" title="Toimituksen valinta">${resource.featured ? '⭐' : '☆'}</button>
                         ${resource.url ? `<button class="action-btn" onclick="refreshSingleImage(${index})" title="Päivitä kuva">🖼️</button>` : ''}
                         ${resource.url ? `<button class="action-btn open" onclick="window.open('${resource.url}', '_blank')" title="Avaa linkki">🔗</button>` : ''}
                         <button class="action-btn edit" onclick="openEditModal(${index})" title="Muokkaa">✏️</button>
@@ -457,6 +463,11 @@
                 currentResources.splice(index, 1);
                 render();
             }
+        }
+
+        function toggleFeatured(index) {
+            currentResources[index].featured = !currentResources[index].featured;
+            render();
         }
 
         async function refreshSingleImage(index) {
@@ -692,7 +703,19 @@
             }
         }
 
+        // Load version
+        async function loadVersion() {
+            try {
+                const res = await fetch('/api/version');
+                const data = await res.json();
+                document.getElementById('version').textContent = 'v' + data.version;
+            } catch (err) {
+                console.error('Version load error:', err);
+            }
+        }
+
         // Init
+        loadVersion();
         loadResources();
     </script>
 </body>

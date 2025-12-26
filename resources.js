@@ -1,9 +1,26 @@
 // Päivitä tätä tiedostoa lisätäksesi uusia resursseja
 // Muista päivittää myös lastUpdated-päivämäärä!
 
-const lastUpdated = "25.12.2025";
+const lastUpdated = "26.12.2025";
 
 const resources = [
+    {
+        title: "Labradorinnoutajakerho ry",
+        description: "Labradorinnoutajakerho ry on labradorinnoutajien oma yhdistys, joka edistää rodun jalostusta ja tarjoaa tietoa sekä harrastusmahdollisuuksia labradorinomistajille.",
+        category: "other",
+        language: "Suomi",
+        url: "https://www.labradori.fi/",
+        image: "https://bin.yhdistysavain.fi/1584146/rqRjSEkAogerEGs6nEu40cQJWN/PIENI_MUSTA_LABRADORINNOUTAJAKERHON_LOGO%20(1000%20x%201000%20px)%20(500%20x%20500%20px).png",
+        featured: true
+    },
+    {
+        title: "Whistleandwagdogtraining",
+        description: "Koirien koulutusvideoita",
+        category: "video",
+        language: "Englanti",
+        url: "https://www.facebook.com/whistleandwagdogtraining/reels/",
+        image: "https://www.facebook.com/images/fb_icon_325x325.png"
+    },
     {
         title: "Suomen sileäkarvaiset noutajat ry",
         description: "Sivusto esittelee Suomen sileäkarvaiset noutajat ry:n toimintaa, rotua ja sen edistämistä. Yhdistys tarjoaa tietoa tapahtumista, kasvattajista ja pentuvälityksestä.",
@@ -402,7 +419,8 @@ const resources = [
         category: "video",
         language: "Englanti",
         url: "https://www.youtube.com/@hawkeyemedianet",
-        image: "https://yt3.googleusercontent.com/ytc/AIdro_kn2pEngb3wHWgc6vsi_VWvDQuar3xaw_JIljM1-txDqog=s900-c-k-c0x00ffffff-no-rj"
+        image: "https://yt3.googleusercontent.com/ytc/AIdro_kn2pEngb3wHWgc6vsi_VWvDQuar3xaw_JIljM1-txDqog=s900-c-k-c0x00ffffff-no-rj",
+        featured: true
     },
     {
         title: "Metsästysnoutajat RY - Artikkelit",
@@ -410,7 +428,8 @@ const resources = [
         category: "article",
         language: "Suomi",
         url: "https://www.metsastysnoutajat.com/artikkelit/",
-        image: "https://bin.yhdistysavain.fi/1590628/y2hbLIV5cSXLY0gIaLkb0U_KsR/riitan1.jpg"
+        image: "https://bin.yhdistysavain.fi/1590628/y2hbLIV5cSXLY0gIaLkb0U_KsR/riitan1.jpg",
+        featured: true
     },
     {
         title: "Nuuskuhommia podcast",
@@ -418,7 +437,8 @@ const resources = [
         category: "podcast",
         language: "Suomi",
         url: "https://www.youtube.com/@Nuuskuhommia",
-        image: "https://yt3.googleusercontent.com/b8SzYIFc3g1oZZ7zg8Ha0EOAux6G8ogh8k8xDhTtOfR-XKvR2Mt2iSPLqn3tKQH55_twoWgx=s900-c-k-c0x00ffffff-no-rj"
+        image: "https://yt3.googleusercontent.com/b8SzYIFc3g1oZZ7zg8Ha0EOAux6G8ogh8k8xDhTtOfR-XKvR2Mt2iSPLqn3tKQH55_twoWgx=s900-c-k-c0x00ffffff-no-rj",
+        featured: true
     },
     {
         title: "Kuonovideo – Noutajan koulutus",
@@ -466,7 +486,8 @@ const resources = [
         category: "article",
         language: "Suomi",
         url: "https://metsastysnoutajat.fi/artikkelit/linjan-alkeet",
-        image: ""
+        image: "",
+        featured: true
     },
     {
         title: "Jyry Tuominen: Aseen käyttö noutajan koulutuksessa",
@@ -474,7 +495,8 @@ const resources = [
         category: "article",
         language: "Suomi",
         url: "https://metsastysnoutajat.fi/artikkelit/aseen-kaytto",
-        image: ""
+        image: "",
+        featured: true
     },
     {
         title: "Sanna Sierilä: Vesityökoulutus",

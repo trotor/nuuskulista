@@ -43,7 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function renderResources() {
     const container = document.getElementById('resources-container');
+    const featuredSection = document.getElementById('featured-section');
+    const featuredContainer = document.getElementById('featured-container');
+
     container.innerHTML = '';
+    featuredContainer.innerHTML = '';
 
     let filteredResources = resources;
 
@@ -64,11 +68,28 @@ function renderResources() {
     }
 
     if (filteredResources.length === 0) {
+        featuredSection.style.display = 'none';
         container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">Ei resursseja näillä suodattimilla.</p>';
         return;
     }
 
-    filteredResources.forEach(resource => {
+    // Separate featured and regular resources
+    const featuredResources = filteredResources.filter(r => r.featured);
+    const regularResources = filteredResources.filter(r => !r.featured);
+
+    // Render featured section
+    if (featuredResources.length > 0) {
+        featuredSection.style.display = 'block';
+        featuredResources.forEach(resource => {
+            const card = createResourceCard(resource);
+            featuredContainer.appendChild(card);
+        });
+    } else {
+        featuredSection.style.display = 'none';
+    }
+
+    // Render regular resources
+    regularResources.forEach(resource => {
         const card = createResourceCard(resource);
         container.appendChild(card);
     });
@@ -76,7 +97,7 @@ function renderResources() {
 
 function createResourceCard(resource) {
     const card = document.createElement('div');
-    card.className = 'resource-card';
+    card.className = 'resource-card' + (resource.featured ? ' featured' : '');
 
     const categoryLabel = getCategoryLabel(resource.category);
     const flag = getLanguageFlag(resource.language);

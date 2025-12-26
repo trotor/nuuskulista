@@ -9,6 +9,12 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.static('.'));
 
+// API: Hae versionumero
+app.get('/api/version', (req, res) => {
+    const pkg = require('./package.json');
+    res.json({ version: pkg.version });
+});
+
 // API: Hae resurssit
 app.get('/api/resources', (req, res) => {
     try {
@@ -53,7 +59,8 @@ const resources = [\n`;
         category: ${JSON.stringify(r.category)},
         language: ${JSON.stringify(r.language)},
         url: ${JSON.stringify(r.url)},
-        image: ${JSON.stringify(r.image || '')}
+        image: ${JSON.stringify(r.image || '')}${r.featured ? `,
+        featured: true` : ''}
     }`;
             if (i < resources.length - 1) output += ',';
             output += '\n';
@@ -106,12 +113,59 @@ async function fetchImageFromUrl(url) {
     }
 }
 
+// Apufunktio: tunnista ja käsittele Facebook-URL
+function parseFacebookUrl(url) {
+    const fbRegex = /^https?:\/\/(www\.)?(facebook\.com|fb\.watch|fb\.com)/i;
+    if (!fbRegex.test(url)) return null;
+
+    const urlObj = new URL(url);
+    const pathParts = urlObj.pathname.split('/').filter(p => p);
+
+    // Yritä päätellä sivun nimi ja tyyppi
+    let pageName = '';
+    let category = 'video'; // Oletus Facebookille
+
+    // /pagename/reels/, /pagename/videos/, /pagename
+    if (pathParts.length > 0) {
+        pageName = pathParts[0].replace(/[_-]/g, ' ');
+        // Muunna camelCase välilyönneiksi
+        pageName = pageName.replace(/([a-z])([A-Z])/g, '$1 $2');
+        // Isot alkukirjaimet
+        pageName = pageName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    // Päättele kategoria polusta
+    if (pathParts.includes('reels') || pathParts.includes('videos') || pathParts.includes('watch')) {
+        category = 'video';
+    } else if (pathParts.includes('posts') || pathParts.includes('photos')) {
+        category = 'article';
+    }
+
+    return {
+        title: pageName || 'Facebook-sivu',
+        description: 'Täydennä kuvaus',
+        category: category,
+        language: 'Englanti',
+        url: url,
+        image: 'https://www.facebook.com/images/fb_icon_325x325.png',
+        _isFacebook: true
+    };
+}
+
 // API: Hae resurssin tiedot URL:sta LLM:llä
 app.post('/api/fetch-resource', async (req, res) => {
     const { url } = req.body;
 
     if (!url) {
         return res.status(400).json({ error: 'URL puuttuu' });
+    }
+
+    // Tarkista onko Facebook-URL
+    const fbData = parseFacebookUrl(url);
+    if (fbData) {
+        // Palauta Facebook-tiedot suoraan ilman hakua
+        delete fbData._isFacebook;
+        return res.json(fbData);
     }
 
     // Tarkista API-avain
@@ -300,7 +354,8 @@ const resources = [\n`;
         category: ${JSON.stringify(r.category)},
         language: ${JSON.stringify(r.language)},
         url: ${JSON.stringify(r.url)},
-        image: ${JSON.stringify(r.image || '')}
+        image: ${JSON.stringify(r.image || '')}${r.featured ? `,
+        featured: true` : ''}
     }`;
             if (i < resources.length - 1) output += ',';
             output += '\n';

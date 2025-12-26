@@ -24,6 +24,16 @@ Avaa http://localhost:3000/admin.html
 
 Katso tarkemmat ohjeet: [ADMIN.md](ADMIN.md)
 
+## Versionumero
+
+Versionumero on `package.json`-tiedostossa muodossa `major.minor.build`.
+
+- **Nosta build-numeroa** (viimeinen numero) joka kerta kun teet muutoksia koodiin
+- **Nosta minor-numeroa** kun lisäät uusia ominaisuuksia
+- **Nosta major-numeroa** kun teet suuria muutoksia
+
+Versionumero näkyy admin-sivun ylälaidassa.
+
 ## Tekoälypromptit
 
 `PROMPTS.md` sisältää promptteja resurssien etsimiseen.
