@@ -26,19 +26,14 @@ header {
 
 .header-content {
     display: flex;
-    align-items: center;
-    gap: 30px;
+    justify-content: center;
 }
 
-.header-logo {
-    width: 120px;
+.header-banner {
+    max-width: 100%;
     height: auto;
-    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
-}
-
-.header-text h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 header h1 {
@@ -537,19 +532,12 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-
-    .header-logo {
-        width: 80px;
-    }
-
-    header h1,
-    .header-text h1 {
+    header h1 {
         font-size: 1.8em;
+    }
+
+    .header-banner {
+        border-radius: 8px;
     }
 
     #resources-container {
