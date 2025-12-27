@@ -24,6 +24,23 @@ header {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.header-logo {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+}
+
+.header-text h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
 header h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
@@ -520,7 +537,18 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
-    header h1 {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .header-logo {
+        width: 80px;
+    }
+
+    header h1,
+    .header-text h1 {
         font-size: 1.8em;
     }
 
