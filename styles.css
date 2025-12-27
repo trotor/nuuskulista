@@ -266,6 +266,14 @@ header h1 {
     background: rgba(255,255,255,0.25);
 }
 
+.resource-header .resource-location {
+    background: rgba(255,255,255,0.25);
+    color: white;
+    padding: 4px 10px;
+    font-size: 0.8em;
+    border-radius: 12px;
+}
+
 /* Category colors */
 .resource-header .resource-category.cat-podcast { background: rgba(156, 39, 176, 0.75); }
 .resource-header .resource-category.cat-video { background: rgba(244, 67, 54, 0.75); }

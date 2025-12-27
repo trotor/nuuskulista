@@ -1,6 +1,7 @@
 // Current filter state
 let currentCategory = 'all';
 let currentLanguage = 'all';
+let currentSort = 'default';
 
 // Render resources on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -25,6 +26,17 @@ document.addEventListener('DOMContentLoaded', function() {
             langButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             currentLanguage = this.dataset.language;
+            renderResources();
+        });
+    });
+
+    // Sort buttons
+    const sortButtons = document.querySelectorAll('.filter-btn[data-sort]');
+    sortButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            sortButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            currentSort = this.dataset.sort;
             renderResources();
         });
     });
@@ -78,6 +90,17 @@ function renderResources() {
         }
     }
 
+    // Sort resources
+    if (currentSort === 'alpha-asc') {
+        filteredResources = [...filteredResources].sort((a, b) =>
+            a.title.localeCompare(b.title, 'fi')
+        );
+    } else if (currentSort === 'alpha-desc') {
+        filteredResources = [...filteredResources].sort((a, b) =>
+            b.title.localeCompare(a.title, 'fi')
+        );
+    }
+
     if (filteredResources.length === 0) {
         featuredSection.style.display = 'none';
         container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">Ei resursseja näillä suodattimilla.</p>';
@@ -122,6 +145,11 @@ function createResourceCard(resource) {
         ? `<a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">Avaa resurssi →</a>`
         : '';
 
+    // Build location HTML if exists
+    const locationHtml = resource.location
+        ? `<span class="resource-location">📍 ${resource.location}</span>`
+        : '';
+
     card.innerHTML = `
         <div class="resource-header ${hasImageClass}" style="${imageStyle}">
             <div class="resource-header-overlay">
@@ -129,6 +157,7 @@ function createResourceCard(resource) {
                 <div class="resource-meta-row">
                     <span class="resource-category cat-${resource.category}">${categoryLabel}</span>
                     <span class="resource-language">${flag} ${resource.language}</span>
+                    ${locationHtml}
                 </div>
             </div>
         </div>

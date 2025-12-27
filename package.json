@@ -7,7 +7,9 @@
   },
   "description": "Noutaja-aiheisia materiaaleja netissä",
   "scripts": {
-    "admin": "node server.js"
+    "admin": "node server.js",
+    "enrich": "node enrich-resources.js",
+    "enrich:dry": "node enrich-resources.js --dry-run"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
