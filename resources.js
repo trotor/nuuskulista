@@ -1,9 +1,51 @@
 // Päivitä tätä tiedostoa lisätäksesi uusia resursseja
 // Muista päivittää myös lastUpdated-päivämäärä!
 
-const lastUpdated = "26.12.2025";
+const lastUpdated = "27.12.2025";
 
 const resources = [
+    {
+        title: "Jyry Tuominen: Noutajan pennusta metsästyskoiraksi",
+        description: "Suomenkielinen erikoisteos noutajan koulutuksesta pennusta valmiiksi metsästyskoiraksi. Kokonaisvaltainen opas joka kattaa koulutuksen eri vaiheet. Erityisen hyödyllinen suomalaisille harrastajille jotka haluavat kouluttaa noutajansa metsästykseen.",
+        category: "book",
+        language: "Suomi",
+        url: "https://www.metsastysnoutajat.com/artikkelit/harri-siven-noutajan-koulutukses/",
+        image: "https://www.google.com/s2/favicons?domain=www.metsastysnoutajat.com&sz=128"
+    },
+    {
+        title: "Suomen Kennelliitto - Digitassu-kurssit",
+        description: "Suomen Kennelliiton verkkokurssialusta kasvattajille ja koiraharrastajille. Digitassu-oppimisympäristössä on tarjolla laaja valikoima perus- ja jatkokoulutusta. Kursseja voi suorittaa omaan tahtiin verkossa. Virallinen ja luotettava tietolähde koiraharrastukseen Suomessa.",
+        category: "course",
+        language: "Suomi",
+        url: "https://www.kennelliitto.fi/en/about-us/courses-and-trainings",
+        image: "https://www.kennelliitto.fi/sites/default/files/images/mudi_12.jpg"
+    },
+    {
+        title: "Savon Nuuskut ry",
+        description: "Pohjois-Savon alueen noutajakoirayhdistys. Toimii Kuopion seudulla.",
+        category: "other",
+        language: "Suomi",
+        url: "https://savon-nuuskut.webnode.fi/",
+        image: "https://13575517d8.cbaul-cdnwnd.com/511281e4eccd1de76975cfc2ce468f39/200000033-a2f33a2f35/700/hein%C3%A4.png?ph=13575517d8",
+        featured: true
+    },
+    {
+        title: "SNJ Koekalenteri",
+        description: "Suomen Noutajakoirajärjestön tarjoama koekalenteri, joka sisältää tietoa noutajakoirien kokeista.",
+        category: "other",
+        language: "Suomi",
+        url: "https://koekalenteri.snj.fi/",
+        image: "https://www.google.com/s2/favicons?domain=koekalenteri.snj.fi&sz=128"
+    },
+    {
+        title: "Koetutka - Noutajakokeet lähellä sinua",
+        description: "Koetutka-sivusto tarjoaa tietoa noutajakokeista ja niiden sijainneista Suomessa. Käyttäjät voivat etsiä kokeita sijainnin mukaan.",
+        category: "other",
+        language: "Suomi",
+        url: "https://trotor.github.io/koetutka/",
+        image: "https://www.google.com/s2/favicons?domain=trotor.github.io&sz=128",
+        featured: true
+    },
     {
         title: "Labradorinnoutajakerho ry",
         description: "Labradorinnoutajakerho ry on labradorinnoutajien oma yhdistys, joka edistää rodun jalostusta ja tarjoaa tietoa sekä harrastusmahdollisuuksia labradorinomistajille.",

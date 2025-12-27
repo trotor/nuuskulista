@@ -42,6 +42,23 @@ header h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.intro-links {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 0.95em;
+}
+
+.intro-links a {
+    color: #2c5f2d;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.intro-links a:hover {
+    text-decoration: underline;
+}
+
 .filters {
     display: flex;
     flex-direction: column;

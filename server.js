@@ -2,9 +2,49 @@ require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = 3000;
+
+// Generoi uniikki ID URL:sta (8-merkkinen hash)
+function generateIdFromUrl(url) {
+    // Normalisoi URL: pienennä, poista trailing slash ja ylimääräiset query-parametrit
+    let normalized = url.toLowerCase().replace(/\/+$/, '');
+    // Poista protokolla vertailusta
+    normalized = normalized.replace(/^https?:\/\//, '');
+    // Poista www.
+    normalized = normalized.replace(/^www\./, '');
+    // Luo MD5 hash ja ota ensimmäiset 8 merkkiä
+    return crypto.createHash('md5').update(normalized).digest('hex').substring(0, 8);
+}
+
+// Hae kaikki olemassa olevat ID:t (sekä resources.js että harvest.json)
+function getAllExistingIds() {
+    const ids = new Set();
+
+    // Lue resources.js
+    try {
+        const content = fs.readFileSync('resources.js', 'utf8');
+        const resourcesMatch = content.match(/const resources = \[([\s\S]*)\];/);
+        if (resourcesMatch) {
+            const resources = eval(`[${resourcesMatch[1]}]`);
+            resources.forEach(r => {
+                if (r.id) ids.add(r.id);
+            });
+        }
+    } catch (err) { /* ignore */ }
+
+    // Lue harvest.json
+    try {
+        const harvest = readHarvest();
+        harvest.forEach(r => {
+            if (r.id) ids.add(r.id);
+        });
+    } catch (err) { /* ignore */ }
+
+    return ids;
+}
 
 app.use(express.json());
 app.use(express.static('.'));
@@ -13,6 +53,151 @@ app.use(express.static('.'));
 app.get('/api/version', (req, res) => {
     const pkg = require('./package.json');
     res.json({ version: pkg.version });
+});
+
+// Harvest-tiedoston käsittely
+const HARVEST_FILE = 'harvest.json';
+
+function readHarvest() {
+    try {
+        if (fs.existsSync(HARVEST_FILE)) {
+            return JSON.parse(fs.readFileSync(HARVEST_FILE, 'utf8'));
+        }
+    } catch (err) {
+        console.error('Harvest read error:', err);
+    }
+    return [];
+}
+
+function writeHarvest(data) {
+    fs.writeFileSync(HARVEST_FILE, JSON.stringify(data, null, 2));
+}
+
+// API: Hae harvest-lista
+app.get('/api/harvest', (req, res) => {
+    res.json(readHarvest());
+});
+
+// API: Lisää harvestoitu resurssi
+app.post('/api/harvest', (req, res) => {
+    const harvest = readHarvest();
+    const resource = req.body;
+
+    // Generoi ID jos puuttuu
+    if (!resource.id && resource.url) {
+        resource.id = generateIdFromUrl(resource.url);
+    }
+
+    // Tarkista duplikaatti
+    const existingIds = getAllExistingIds();
+    if (existingIds.has(resource.id)) {
+        return res.status(409).json({
+            error: 'Duplikaatti',
+            message: `Resurssi ID:llä ${resource.id} on jo olemassa`,
+            id: resource.id
+        });
+    }
+
+    resource.harvestedAt = new Date().toISOString();
+    harvest.unshift(resource);
+    writeHarvest(harvest);
+    res.json({ success: true, count: harvest.length, id: resource.id });
+});
+
+// API: Hyväksy harvestoitu resurssi → siirrä resources.js:ään
+app.post('/api/harvest/approve/:index', (req, res) => {
+    try {
+        const index = parseInt(req.params.index);
+        const harvest = readHarvest();
+
+        if (index < 0 || index >= harvest.length) {
+            return res.status(400).json({ error: 'Virheellinen indeksi' });
+        }
+
+        const resource = harvest.splice(index, 1)[0];
+        delete resource.harvestedAt;
+
+        // Lue nykyiset resurssit
+        const content = fs.readFileSync('resources.js', 'utf8');
+        const resourcesMatch = content.match(/const resources = \[([\s\S]*)\];/);
+        let resources = [];
+        if (resourcesMatch) {
+            resources = eval(`[${resourcesMatch[1]}]`);
+        }
+
+        // Lisää alkuun
+        resources.unshift(resource);
+
+        // Tallenna resources.js
+        const today = new Date();
+        const dateStr = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+
+        let output = `// Päivitä tätä tiedostoa lisätäksesi uusia resursseja
+// Muista päivittää myös lastUpdated-päivämäärä!
+
+const lastUpdated = "${dateStr}";
+
+const resources = [\n`;
+
+        resources.forEach((r, i) => {
+            // Generoi ID jos puuttuu
+            if (!r.id && r.url) {
+                r.id = generateIdFromUrl(r.url);
+            }
+            output += `    {
+        id: ${JSON.stringify(r.id || '')},
+        title: ${JSON.stringify(r.title)},
+        description: ${JSON.stringify(r.description)},
+        category: ${JSON.stringify(r.category)},
+        language: ${JSON.stringify(r.language)},
+        url: ${JSON.stringify(r.url)},
+        image: ${JSON.stringify(r.image || '')}${r.featured ? `,
+        featured: true` : ''}
+    }`;
+            if (i < resources.length - 1) output += ',';
+            output += '\n';
+        });
+
+        output += '];\n';
+        fs.writeFileSync('resources.js', output);
+
+        // Tallenna päivitetty harvest
+        writeHarvest(harvest);
+
+        res.json({ success: true, message: 'Hyväksytty ja lisätty!' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// API: Poista harvestista
+app.delete('/api/harvest/:index', (req, res) => {
+    const index = parseInt(req.params.index);
+    const harvest = readHarvest();
+
+    if (index < 0 || index >= harvest.length) {
+        return res.status(400).json({ error: 'Virheellinen indeksi' });
+    }
+
+    harvest.splice(index, 1);
+    writeHarvest(harvest);
+    res.json({ success: true });
+});
+
+// API: Päivitä harvestoitu resurssi
+app.put('/api/harvest/:index', (req, res) => {
+    const index = parseInt(req.params.index);
+    const harvest = readHarvest();
+
+    if (index < 0 || index >= harvest.length) {
+        return res.status(400).json({ error: 'Virheellinen indeksi' });
+    }
+
+    const resource = req.body;
+    resource.harvestedAt = harvest[index].harvestedAt; // Säilytä alkuperäinen aika
+    harvest[index] = resource;
+    writeHarvest(harvest);
+    res.json({ success: true });
 });
 
 // API: Hae resurssit
@@ -53,7 +238,12 @@ const lastUpdated = "${dateStr}";
 const resources = [\n`;
 
         resources.forEach((r, i) => {
+            // Generoi ID jos puuttuu
+            if (!r.id && r.url) {
+                r.id = generateIdFromUrl(r.url);
+            }
             output += `    {
+        id: ${JSON.stringify(r.id || '')},
         title: ${JSON.stringify(r.title)},
         description: ${JSON.stringify(r.description)},
         category: ${JSON.stringify(r.category)},
@@ -165,6 +355,7 @@ app.post('/api/fetch-resource', async (req, res) => {
     if (fbData) {
         // Palauta Facebook-tiedot suoraan ilman hakua
         delete fbData._isFacebook;
+        fbData.id = generateIdFromUrl(url);
         return res.json(fbData);
     }
 
@@ -269,6 +460,7 @@ Sisältöä: ${bodyText.substring(0, 2000)}`
         }
 
         const resourceData = JSON.parse(jsonMatch[0]);
+        resourceData.id = generateIdFromUrl(url);
         resourceData.url = url;
         resourceData.image = image;
 
@@ -348,7 +540,12 @@ const lastUpdated = "${dateStr}";
 const resources = [\n`;
 
         resources.forEach((r, i) => {
+            // Generoi ID jos puuttuu
+            if (!r.id && r.url) {
+                r.id = generateIdFromUrl(r.url);
+            }
             output += `    {
+        id: ${JSON.stringify(r.id || '')},
         title: ${JSON.stringify(r.title)},
         description: ${JSON.stringify(r.description)},
         category: ${JSON.stringify(r.category)},

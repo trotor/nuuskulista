@@ -4,6 +4,12 @@
 
 Suomen Noutajakoirajärjestön (SNJ) Nuusku-lehden artikkelin tukisivu. Listaa noutajakoirien koulutukseen liittyviä materiaaleja.
 
+## Lisenssi
+
+- **Koodi:** Avoin lähdekoodi (MIT)
+- **Data (resources.js):** Yksityinen, ei uudelleenkäyttöoikeutta ilman lupaa
+- **Jatkosuunnitelmat:** Luottamuksellisia (secret gist `.planning/`-kansiossa, gitignorattu)
+
 ## Sivusto
 
 https://trotor.github.io/nuuskulista/
