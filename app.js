@@ -29,15 +29,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Popup functionality
-    const popup = document.getElementById('help-popup');
-    const openBtn = document.getElementById('open-help');
-    const closeBtn = document.getElementById('close-popup');
+    // Help popup functionality
+    const helpPopup = document.getElementById('help-popup');
+    const openHelpBtn = document.getElementById('open-help');
+    const closeHelpBtn = document.getElementById('close-popup');
 
-    openBtn.addEventListener('click', () => popup.classList.add('active'));
-    closeBtn.addEventListener('click', () => popup.classList.remove('active'));
-    popup.addEventListener('click', (e) => {
-        if (e.target === popup) popup.classList.remove('active');
+    openHelpBtn.addEventListener('click', () => helpPopup.classList.add('active'));
+    closeHelpBtn.addEventListener('click', () => helpPopup.classList.remove('active'));
+    helpPopup.addEventListener('click', (e) => {
+        if (e.target === helpPopup) helpPopup.classList.remove('active');
+    });
+
+    // Glossary popup functionality
+    const glossaryPopup = document.getElementById('glossary-popup');
+    const openGlossaryBtn = document.getElementById('open-glossary');
+    const closeGlossaryBtn = document.getElementById('close-glossary');
+
+    openGlossaryBtn.addEventListener('click', () => glossaryPopup.classList.add('active'));
+    closeGlossaryBtn.addEventListener('click', () => glossaryPopup.classList.remove('active'));
+    glossaryPopup.addEventListener('click', (e) => {
+        if (e.target === glossaryPopup) glossaryPopup.classList.remove('active');
     });
 });
 

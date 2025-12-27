@@ -18,7 +18,7 @@
         <section class="intro">
             <p>Tämä sivusto kerää yhteen netissä olevia noutaja-aiheisia materiaaleja.
             Sivusto on luotu Nuusku-lehden artikkelia varten ja sitä päivitetään säännöllisesti uusilla löydöillä.</p>
-            <p class="intro-links"><a href="https://github.com/trotor/nuuskulista/blob/main/noutajasanasto.md" target="_blank">Noutajasanasto</a> - Koulutuksen ja kokeiden termit selitettynä</p>
+            <p class="intro-links"><button id="open-glossary" class="glossary-link">Noutajasanasto</button> - Koulutuksen ja kokeiden termit selitettynä</p>
         </section>
 
         <div class="filters">
@@ -75,6 +75,90 @@
             </ol>
             <p>Ehdotuksesi käsitellään ja lisätään sivustolle, jos se sopii kokoelmaan.</p>
             <a href="https://github.com/trotor/nuuskulista/issues/new?template=lisaa-resurssi.yml" target="_blank" class="popup-btn">Ehdota resurssia</a>
+        </div>
+    </div>
+
+    <!-- Sanasto-popup -->
+    <div id="glossary-popup" class="popup-overlay">
+        <div class="popup-content glossary">
+            <button id="close-glossary" class="popup-close">&times;</button>
+            <h2>Noutajasanasto</h2>
+
+            <h3>Kokeet ja lyhenteet</h3>
+            <table>
+                <tr><th>Lyhenne</th><th>Nimi</th><th>Selitys</th></tr>
+                <tr><td><strong>NOU</strong></td><td>Noutajien taipumuskoe</td><td>Ensimmäinen koe noutajan koeuralla. Suoritetaan kylmällä riistalla.</td></tr>
+                <tr><td><strong>NOME-A</strong></td><td>Noutajien metsästyskoe (lämmin riista)</td><td>Metsästyskoe jossa noudetaan tuoreesti ammuttua riistaa.</td></tr>
+                <tr><td><strong>NOME-B</strong></td><td>Noutajien metsästyskoe (kylmä riista)</td><td>Metsästyskoe kylmällä riistalla. Luokat: ALO, AVO, VOI.</td></tr>
+                <tr><td><strong>WT / NOWT</strong></td><td>Working Test</td><td>Käyttökoe jossa noudetaan dameja. Pisteytetään ja sijoitetaan.</td></tr>
+                <tr><td><strong>MEJÄ</strong></td><td>Metsästäjäin jälki</td><td>Verijälkikoe jossa koira seuraa simuloitua jälkeä.</td></tr>
+                <tr><td><strong>ALO / AVO / VOI</strong></td><td>Alokas / Avoin / Voittaja</td><td>NOME-B kokeen tasoluokat.</td></tr>
+            </table>
+
+            <h3>Kolme perustehtävää</h3>
+            <table>
+                <tr><th>Termi</th><th>Englanniksi</th><th>Selitys</th></tr>
+                <tr><td><strong>Markkeeraus</strong></td><td>Marking</td><td>Koira näkee damin putoavan ja muistaa paikan. Lähtee vasta luvalla.</td></tr>
+                <tr><td><strong>Ohjaus</strong></td><td>Handling / Blind</td><td>Ohjaaja ohjaa koiran pillin ja käsimerkkien avulla noutoon jota koira ei nähnyt.</td></tr>
+                <tr><td><strong>Haku</strong></td><td>Hunt / Hunting</td><td>Koira etsii itsenäisesti hakualuetta vainuaan käyttäen.</td></tr>
+            </table>
+
+            <h3>Koulutustermit</h3>
+            <table>
+                <tr><th>Termi</th><th>Selitys</th></tr>
+                <tr><td><strong>Dami / Dummy</strong></td><td>Kangaspäällysteinen harjoitusnoudon esine.</td></tr>
+                <tr><td><strong>Perusasento</strong></td><td>Koira istuu ohjaajan vasemmalla puolella.</td></tr>
+                <tr><td><strong>Stadga</strong></td><td>Koiran maltti ja itsehillintä - odottaa lupaa.</td></tr>
+                <tr><td><strong>Pillihallinta</strong></td><td>Koiran reagointi pillimerkkeihin.</td></tr>
+                <tr><td><strong>Linja</strong></td><td>Koira kulkee suoraan osoitettuun suuntaan.</td></tr>
+                <tr><td><strong>Blindinouto</strong></td><td>Nouto jota koira ei ole nähnyt.</td></tr>
+                <tr><td><strong>Muistinouto</strong></td><td>Koira muistaa aiemmin näkemänsä noudon paikan.</td></tr>
+                <tr><td><strong>Tuplat / Triplat</strong></td><td>Kaksi tai kolme peräkkäistä noutoa samassa tehtävässä.</td></tr>
+            </table>
+
+            <h3>Pillimerkit</h3>
+            <table>
+                <tr><th>Merkki</th><th>Tarkoitus</th></tr>
+                <tr><td><strong>Yksi pitkä vihelys</strong></td><td>Istu / Pysähdy ja katso ohjaajaa</td></tr>
+                <tr><td><strong>Useita lyhyitä vihellyksiä</strong></td><td>Tule luokse</td></tr>
+            </table>
+
+            <h3>Käsimerkit</h3>
+            <table>
+                <tr><th>Merkki</th><th>Tarkoitus</th></tr>
+                <tr><td><strong>Käsi ylös</strong></td><td>Mene taaksepäin (back)</td></tr>
+                <tr><td><strong>Käsi sivulle</strong></td><td>Mene oikealle/vasemmalle (over)</td></tr>
+                <tr><td><strong>Käsi alas/eteen</strong></td><td>Mene eteenpäin / hae edestä</td></tr>
+            </table>
+
+            <h3>MEJÄ-kokeen sanasto</h3>
+            <table>
+                <tr><th>Termi</th><th>Selitys</th></tr>
+                <tr><td><strong>Veretys</strong></td><td>Jäljen tekeminen verellä.</td></tr>
+                <tr><td><strong>Lähtö</strong></td><td>Jäljen alkupiste.</td></tr>
+                <tr><td><strong>Kaato</strong></td><td>Jäljen loppupiste, jossa sorkka makaa.</td></tr>
+                <tr><td><strong>Makaus</strong></td><td>Haavoittuneen riistan makuupaikka jäljellä.</td></tr>
+                <tr><td><strong>Kulma</strong></td><td>90 asteen käännös jäljessä.</td></tr>
+                <tr><td><strong>Maavainuisuus</strong></td><td>Koira seuraa jälkeä nenä maassa.</td></tr>
+                <tr><td><strong>Ilmavainuisuus</strong></td><td>Koira hakee vainua ilmasta.</td></tr>
+            </table>
+
+            <h3>Koiran ominaisuudet</h3>
+            <table>
+                <tr><th>Termi</th><th>Selitys</th></tr>
+                <tr><td><strong>Noutohalu</strong></td><td>Koiran luontainen halu noutaa esineitä.</td></tr>
+                <tr><td><strong>Hakuinto</strong></td><td>Koiran into etsiä ja löytää.</td></tr>
+                <tr><td><strong>Riistankäsittely</strong></td><td>Miten koira käsittelee riistaa suussaan.</td></tr>
+                <tr><td><strong>Vesityöhalu</strong></td><td>Koiran into työskennellä vedessä.</td></tr>
+                <tr><td><strong>Yhteistyökyky</strong></td><td>Koiran halu työskennellä ohjaajan kanssa.</td></tr>
+            </table>
+
+            <div class="glossary-links">
+                <strong>Lisätietoja:</strong>
+                <a href="https://www.snj.fi/harrastukset/rodunomaisetkokeet/" target="_blank">SNJ: Rodunomaiset kokeet</a>
+                <a href="https://www.snj.fi/harrastukset/rodunomaisetkokeet/kokeiden-lyhenteita/" target="_blank">SNJ: Kokeiden lyhenteitä</a>
+                <a href="https://www.snj.fi/harrastukset/meja/meja-sanastoa/" target="_blank">SNJ: MEJÄ-sanasto</a>
+            </div>
         </div>
     </div>
 
