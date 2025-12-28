@@ -1,6 +1,6 @@
 {
   "name": "nuuskulista",
-  "version": "1.2.1",
+  "version": "1.3.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/trotor/nuuskulista"
@@ -11,6 +11,16 @@
     "enrich": "node enrich-resources.js",
     "enrich:dry": "node enrich-resources.js --dry-run"
   },
+  "changelog": [
+    { "version": "1.3.3", "date": "2024-12-28", "changes": ["Kuvan päivitysnappi harvest-listalle"] },
+    { "version": "1.3.2", "date": "2024-12-28", "changes": ["Enricher hakee puuttuvat kuvat automaattisesti"] },
+    { "version": "1.3.1", "date": "2024-12-28", "changes": ["Versiohistoria näkyy admin-sivulla", "Facebook-URL:t tunnistetaan enricherissä", "CLAUDE.md ohjeistus versiohistoriasta"] },
+    { "version": "1.3.0", "date": "2024-12-28", "changes": ["Enricher lisää enrichedAt-aikaleiman", "Admin näyttää rikastetut resurssit ja paikkakunnat", "Location-kenttä säilyy tallennuksessa"] },
+    { "version": "1.2.1", "date": "2024-12-27", "changes": ["Lajittelu ja paikkakunta-tuki"] },
+    { "version": "1.2.0", "date": "2024-12-26", "changes": ["Harvest-järjestelmä resurssien tarkistukseen"] },
+    { "version": "1.1.0", "date": "2024-12-25", "changes": ["Enricher paikkakuntatietojen hakuun"] },
+    { "version": "1.0.0", "date": "2024-12-20", "changes": ["Ensimmäinen julkaisu"] }
+  ],
   "dependencies": {
     "cheerio": "^1.0.0",
     "dotenv": "^16.3.1",

@@ -30,7 +30,7 @@ Avaa http://localhost:3000/admin.html
 
 Katso tarkemmat ohjeet: [ADMIN.md](ADMIN.md)
 
-## Versionumero
+## Versionumero ja versiohistoria
 
 Versionumero on `package.json`-tiedostossa muodossa `major.minor.build`.
 
@@ -38,7 +38,15 @@ Versionumero on `package.json`-tiedostossa muodossa `major.minor.build`.
 - **Nosta minor-numeroa** kun lisäät uusia ominaisuuksia
 - **Nosta major-numeroa** kun teet suuria muutoksia
 
-Versionumero näkyy admin-sivun ylälaidassa.
+**Muista päivittää myös `changelog`-kenttä `package.json`:ssa** kun nostat versionumeroa:
+```json
+"changelog": [
+  { "version": "1.3.0", "date": "2024-12-28", "changes": ["Muutos 1", "Muutos 2"] },
+  ...
+]
+```
+
+Versionumero näkyy admin-sivun ylälaidassa (klikkaa nähdäksesi versiohistoria).
 
 ## Tekoälypromptit
 

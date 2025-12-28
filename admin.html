@@ -742,15 +742,42 @@
             }
         }
 
-        // Load version
+        // Load version and changelog
+        let changelogData = [];
         async function loadVersion() {
             try {
                 const res = await fetch('/api/version');
                 const data = await res.json();
-                document.getElementById('version').textContent = 'v' + data.version;
+                changelogData = data.changelog || [];
+                const versionEl = document.getElementById('version');
+                versionEl.textContent = 'v' + data.version;
+                versionEl.style.cursor = 'pointer';
+                versionEl.title = 'Näytä versiohistoria';
+                versionEl.onclick = showChangelog;
             } catch (err) {
                 console.error('Version load error:', err);
             }
+        }
+
+        function showChangelog() {
+            let html = '<div style="background:white; padding:25px; border-radius:10px; max-width:500px; max-height:80vh; overflow:auto;">';
+            html += '<h2 style="color:#2c5f2d; margin-bottom:20px;">Versiohistoria</h2>';
+            changelogData.forEach(v => {
+                html += `<div style="margin-bottom:15px;">
+                    <strong>v${v.version}</strong> <span style="color:#888;">(${v.date})</span>
+                    <ul style="margin:5px 0 0 20px;">
+                        ${v.changes.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                </div>`;
+            });
+            html += '<button class="btn-secondary" onclick="this.parentElement.parentElement.remove()" style="margin-top:10px;">Sulje</button>';
+            html += '</div>';
+
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; z-index:1001;';
+            overlay.innerHTML = html;
+            overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+            document.body.appendChild(overlay);
         }
 
         // Harvest functions
@@ -801,11 +828,14 @@
                         <div class="resource-meta">
                             <span>${category}</span>
                             <span>${flag} ${resource.language}</span>
+                            ${resource.location ? `<span style="background: #e8f5e9; color: #2e7d32;">📍 ${resource.location}</span>` : ''}
+                            ${resource.enrichedAt ? `<span style="background: #e3f2fd; color: #1565c0;">✨ Rikastettu</span>` : ''}
                             <span style="background: #ffecb3;">📅 ${date}</span>
                         </div>
                     </div>
                     <div class="resource-actions">
                         <button class="action-btn" onclick="approveHarvest(${index})" title="Hyväksy ja julkaise" style="color: #28a745;">✅</button>
+                        ${resource.url ? `<button class="action-btn" onclick="refreshHarvestImage(${index})" title="Päivitä kuva">🖼️</button>` : ''}
                         <button class="action-btn" onclick="editHarvest(${index})" title="Muokkaa">✏️</button>
                         <button class="action-btn delete" onclick="deleteHarvest(${index})" title="Hylkää">✕</button>
                     </div>
@@ -844,6 +874,36 @@
                     loadHarvest();
                 } else {
                     showStatus('Virhe: ' + data.error, 'error');
+                }
+            } catch (err) {
+                showStatus('Virhe: ' + err.message, 'error');
+            }
+        }
+
+        async function refreshHarvestImage(index) {
+            const resource = harvestData[index];
+            showStatus(`Haetaan kuvaa: ${resource.title}...`, 'success');
+
+            try {
+                const res = await fetch('/api/refresh-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: resource.url })
+                });
+                const data = await res.json();
+
+                if (data.success && data.image) {
+                    // Päivitä harvest-resurssi
+                    resource.image = data.image;
+                    await fetch(`/api/harvest/${index}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(resource)
+                    });
+                    loadHarvest();
+                    showStatus('Kuva päivitetty!', 'success');
+                } else {
+                    showStatus('Kuvaa ei löytynyt', 'error');
                 }
             } catch (err) {
                 showStatus('Virhe: ' + err.message, 'error');

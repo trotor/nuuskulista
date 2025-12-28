@@ -49,10 +49,10 @@ function getAllExistingIds() {
 app.use(express.json());
 app.use(express.static('.'));
 
-// API: Hae versionumero
+// API: Hae versionumero ja changelog
 app.get('/api/version', (req, res) => {
     const pkg = require('./package.json');
-    res.json({ version: pkg.version });
+    res.json({ version: pkg.version, changelog: pkg.changelog || [] });
 });
 
 // Harvest-tiedoston käsittely
@@ -151,7 +151,8 @@ const resources = [\n`;
         category: ${JSON.stringify(r.category)},
         language: ${JSON.stringify(r.language)},
         url: ${JSON.stringify(r.url)},
-        image: ${JSON.stringify(r.image || '')}${r.featured ? `,
+        image: ${JSON.stringify(r.image || '')}${r.location ? `,
+        location: ${JSON.stringify(r.location)}` : ''}${r.featured ? `,
         featured: true` : ''}
     }`;
             if (i < resources.length - 1) output += ',';
@@ -249,7 +250,8 @@ const resources = [\n`;
         category: ${JSON.stringify(r.category)},
         language: ${JSON.stringify(r.language)},
         url: ${JSON.stringify(r.url)},
-        image: ${JSON.stringify(r.image || '')}${r.featured ? `,
+        image: ${JSON.stringify(r.image || '')}${r.location ? `,
+        location: ${JSON.stringify(r.location)}` : ''}${r.featured ? `,
         featured: true` : ''}
     }`;
             if (i < resources.length - 1) output += ',';
@@ -551,7 +553,8 @@ const resources = [\n`;
         category: ${JSON.stringify(r.category)},
         language: ${JSON.stringify(r.language)},
         url: ${JSON.stringify(r.url)},
-        image: ${JSON.stringify(r.image || '')}${r.featured ? `,
+        image: ${JSON.stringify(r.image || '')}${r.location ? `,
+        location: ${JSON.stringify(r.location)}` : ''}${r.featured ? `,
         featured: true` : ''}
     }`;
             if (i < resources.length - 1) output += ',';

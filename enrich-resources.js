@@ -24,6 +24,11 @@ const OpenAI = require('openai');
 // Kategoriat joille paikkakunta on relevantti
 const LOCATION_RELEVANT_CATEGORIES = ['trainer', 'shop', 'course', 'other'];
 
+// Facebook-URL tunnistus (ei voi hakea sivua)
+function isFacebookUrl(url) {
+    return /^https?:\/\/(www\.)?(facebook\.com|fb\.watch|fb\.com)/i.test(url);
+}
+
 // Suomen kaupungit ja kunnat tunnistusta varten
 const FINNISH_CITIES = [
     'Helsinki', 'Espoo', 'Tampere', 'Vantaa', 'Oulu', 'Turku', 'Jyväskylä',
@@ -95,7 +100,7 @@ function readHarvest() {
     return { resources: JSON.parse(content), exists: true };
 }
 
-// Hae sivu ja palauta teksti
+// Hae sivu ja palauta teksti sekä kuva
 async function fetchPage(url) {
     try {
         const response = await fetch(url, {
@@ -113,7 +118,26 @@ async function fetchPage(url) {
         const html = await response.text();
         const $ = cheerio.load(html);
 
-        // Poista skriptit ja tyylit
+        // Hae kuva (og:image, twitter:image tai favicon)
+        let image = $('meta[property="og:image"]').attr('content');
+        if (!image) image = $('meta[name="og:image"]').attr('content');
+        if (!image) image = $('meta[property="twitter:image"]').attr('content');
+
+        // Muunna suhteellinen URL absoluuttiseksi
+        if (image && !image.startsWith('http')) {
+            const urlObj = new URL(url);
+            image = image.startsWith('/')
+                ? `${urlObj.protocol}//${urlObj.host}${image}`
+                : `${urlObj.protocol}//${urlObj.host}/${image}`;
+        }
+
+        // Fallback: Google favicon
+        if (!image) {
+            const urlObj = new URL(url);
+            image = `https://www.google.com/s2/favicons?domain=${urlObj.host}&sz=128`;
+        }
+
+        // Poista skriptit ja tyylit tekstiä varten
         $('script, style, nav, footer, header').remove();
 
         // Hae pääsisältö
@@ -122,7 +146,7 @@ async function fetchPage(url) {
             .trim()
             .substring(0, 5000); // Rajoita 5000 merkkiin
 
-        return text;
+        return { text, image };
     } catch (error) {
         console.log(`  ⚠️  Fetch error for ${url}: ${error.message}`);
         return null;
@@ -209,26 +233,48 @@ async function enrichResource(resource, options) {
     console.log(`\n📍 Haetaan paikkakuntaa: ${resource.title}`);
     console.log(`   URL: ${resource.url}`);
 
-    // Hae sivu
-    const pageText = await fetchPage(resource.url);
-
-    if (!pageText) {
+    // Facebook-sivuja ei voi hakea - yritä etsiä paikkakunta otsikosta
+    if (isFacebookUrl(resource.url)) {
+        console.log(`   ℹ️  Facebook-sivu, yritetään otsikosta...`);
+        const location = findLocationSimple(resource.title);
+        if (location) {
+            console.log(`   ✅ Löytyi otsikosta: ${location}`);
+            return { location, enrichedAt: new Date().toISOString() };
+        }
+        console.log(`   ⏭️  Ohitetaan (ei paikkakuntaa otsikossa)`);
         return null;
     }
 
+    // Hae sivu
+    const pageData = await fetchPage(resource.url);
+
+    if (!pageData) {
+        return null;
+    }
+
+    // Tarkista ja päivitä kuva jos puuttuu
+    if (!resource.image && pageData.image) {
+        console.log(`   🖼️  Kuva: ${pageData.image.substring(0, 50)}...`);
+        changes.image = pageData.image;
+    }
+
     // Kokeile ensin yksinkertaista hakua
-    let location = findLocationSimple(pageText);
+    let location = findLocationSimple(pageData.text);
 
     // Jos ei löydy ja AI on käytettävissä, kokeile AI:ta
     if (!location && openai) {
-        location = await findLocationWithAI(pageText, resource.title);
+        location = await findLocationWithAI(pageData.text, resource.title);
     }
 
     if (location) {
         console.log(`   ✅ Löytyi: ${location}`);
         changes.location = location;
+    }
+
+    if (Object.keys(changes).length > 0) {
+        changes.enrichedAt = new Date().toISOString();
     } else {
-        console.log(`   ❌ Paikkakuntaa ei löytynyt`);
+        console.log(`   ❌ Ei muutoksia`);
     }
 
     return Object.keys(changes).length > 0 ? changes : null;
