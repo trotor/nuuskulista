@@ -87,6 +87,41 @@ Issue sulkeutuu automaattisesti ja sivusto päivittyy.
 | `app.js` | Sivuston toiminnallisuus |
 | `admin.html` | Hallintasivu |
 | `server.js` | Hallintasivun backend |
+| `enrich-resources.js` | Työkalu resurssien rikastamiseen |
+
+---
+
+## Resurssien rikastaminen (Enricher)
+
+`enrich-resources.js` on työkalu, joka täydentää resurssien metatietoja automaattisesti.
+
+### Käyttö
+
+```bash
+# Normaali ajo - päivittää resources.js
+npm run enrich
+
+# Kuivaharjoitus - ei tallenna muutoksia
+npm run enrich:dry
+```
+
+### Mitä enricher tekee?
+
+1. **Hakee puuttuvat kuvat** - Jos resurssilla ei ole kuvaa, OpenAI luo sen automaattisesti
+2. **Hakee paikkakunnat** - Jos resurssilla ei ole paikkakuntaa, enricher yrittää hakea sen URL:sta
+3. **Lisää aikaleiman** - Jokaiseen resurssiin lisätään `enrichedAt`-kenttä
+
+### Esimerkki
+
+```json
+{
+  "name": "Noutajatreeni Podcast",
+  "url": "https://example.com",
+  "image": "https://generated-image.png",  // Luotu automaattisesti
+  "location": "Helsinki",                  // Haettu URL:sta
+  "enrichedAt": "2024-12-28T12:00:00.000Z" // Aikaleima
+}
+```
 
 ---
 
@@ -189,6 +224,10 @@ Nykyinen versio näkyy tiedostossa `VERSION` ja `package.json`.
 
 ## Versiohistoria
 
-| Versio | Päivämäärä | Muutokset |
-|--------|------------|-----------|
-| 1.0.0 | 25.12.2024 | Ensimmäinen julkaisu |
+Versiohistoria on siirretty `package.json`-tiedostoon. Katso nykyinen versio ja changelog:
+
+```bash
+cat package.json | grep -A 20 '"changelog"'
+```
+
+Tai tarkista versio admin-sivulta klikkaamalla versionumeroa.

@@ -2,7 +2,7 @@ name: Lisää resurssi automaattisesti
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, labeled]
 
 permissions:
   contents: write

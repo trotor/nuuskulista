@@ -12,13 +12,21 @@ Suomen Noutajakoirajärjestön (SNJ) Nuusku-lehden artikkelin tukisivu. Listaa n
 
 ## Sivusto
 
-https://trotor.github.io/nuuskulista/
+**Tuotanto:** https://www.noutajalista.fi/
+**GitHub Pages:** https://trotor.github.io/nuuskulista/
 
 ## Rakenne
 
-- `index.html` - Julkinen sivu
+### Julkinen sivusto
+- `index.html` - Julkinen pääsivu
+- `app.js` - Sivuston toiminnallisuus (suodatus, popup-ohjeet)
+- `styles.css` - Sivuston tyylit
 - `resources.js` - Resurssien data
-- `admin.html` + `server.js` - Hallintasivu (lokaali)
+
+### Hallintasivusto (lokaali)
+- `admin.html` - Hallintasivu
+- `server.js` - Hallintasivun backend (Express + OpenAI)
+- `enrich-resources.js` - Työkalu resurssien rikastamiseen (metadata, paikkakunnat)
 
 ## Hallintasivu
 

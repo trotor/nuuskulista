@@ -3,6 +3,17 @@ let currentCategory = 'all';
 let currentLanguage = 'all';
 let currentSort = 'default';
 
+// Generate URL-safe slug from text
+function generateSlug(text) {
+    return text
+        .toLowerCase()
+        .replace(/ä/g, 'a')
+        .replace(/ö/g, 'o')
+        .replace(/å/g, 'a')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
 // Render resources on page load
 document.addEventListener('DOMContentLoaded', function() {
     renderResources();
@@ -44,9 +55,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Help popup functionality
     const helpPopup = document.getElementById('help-popup');
     const openHelpBtn = document.getElementById('open-help');
+    const headerHelpBtn = document.getElementById('header-help-btn');
     const closeHelpBtn = document.getElementById('close-popup');
 
     openHelpBtn.addEventListener('click', () => helpPopup.classList.add('active'));
+    headerHelpBtn.addEventListener('click', () => helpPopup.classList.add('active'));
     closeHelpBtn.addEventListener('click', () => helpPopup.classList.remove('active'));
     helpPopup.addEventListener('click', (e) => {
         if (e.target === helpPopup) helpPopup.classList.remove('active');
@@ -62,6 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
     glossaryPopup.addEventListener('click', (e) => {
         if (e.target === glossaryPopup) glossaryPopup.classList.remove('active');
     });
+
+    // Handle hash routing for sharing individual resources
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
 });
 
 function renderResources() {
@@ -133,6 +150,10 @@ function createResourceCard(resource) {
     const card = document.createElement('div');
     card.className = 'resource-card' + (resource.featured ? ' featured' : '');
 
+    // Generate unique ID for this resource
+    const resourceId = generateSlug(resource.title);
+    card.setAttribute('data-resource-id', resourceId);
+
     const categoryLabel = getCategoryLabel(resource.category);
     const flag = getLanguageFlag(resource.language);
 
@@ -152,6 +173,13 @@ function createResourceCard(resource) {
 
     card.innerHTML = `
         <div class="resource-header ${hasImageClass}" style="${imageStyle}">
+            <button class="share-btn" title="Kopioi linkki tähän resurssiin">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                    <polyline points="16 6 12 2 8 6"></polyline>
+                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+            </button>
             <div class="resource-header-overlay">
                 <h3>${resource.title}</h3>
                 <div class="resource-meta-row">
@@ -171,6 +199,49 @@ function createResourceCard(resource) {
     const desc = card.querySelector('.resource-desc');
     desc.addEventListener('click', function() {
         this.classList.toggle('expanded');
+    });
+
+    // Share button functionality
+    const shareBtn = card.querySelector('.share-btn');
+    shareBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        const shareUrl = `${window.location.origin}${window.location.pathname}#${resourceId}`;
+
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            // Show success feedback with checkmark
+            const originalText = this.innerHTML;
+            this.classList.add('copied');
+            this.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            `;
+            setTimeout(() => {
+                this.classList.remove('copied');
+                this.innerHTML = originalText;
+            }, 2000);
+        } catch (err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = shareUrl;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            const originalText = this.innerHTML;
+            this.classList.add('copied');
+            this.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            `;
+            setTimeout(() => {
+                this.classList.remove('copied');
+                this.innerHTML = originalText;
+            }, 2000);
+        }
     });
 
     return card;
@@ -198,4 +269,29 @@ function getCategoryLabel(category) {
         'other': 'Muu'
     };
     return labels[category] || category;
+}
+
+function handleHashChange() {
+    const hash = window.location.hash.slice(1); // Remove # prefix
+    if (!hash) return;
+
+    // Wait a bit for cards to render
+    setTimeout(() => {
+        const targetCard = document.querySelector(`[data-resource-id="${hash}"]`);
+        if (targetCard) {
+            // Remove previous highlights
+            document.querySelectorAll('.resource-card.highlighted').forEach(card => {
+                card.classList.remove('highlighted');
+            });
+
+            // Scroll to card and highlight it
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            targetCard.classList.add('highlighted');
+
+            // Remove highlight after 10 seconds
+            setTimeout(() => {
+                targetCard.classList.remove('highlighted');
+            }, 10000);
+        }
+    }, 100);
 }

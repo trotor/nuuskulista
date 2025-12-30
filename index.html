@@ -11,6 +11,9 @@
 <body>
     <header>
         <img src="banner.png" alt="Noutajalista - Kaikki noutajista yhdestä paikasta" class="header-banner">
+        <button id="header-help-btn" class="header-help-btn" title="Ohjeet ja palaute">
+            <span class="help-icon">?</span>
+        </button>
     </header>
 
     <main class="container">
@@ -61,8 +64,9 @@
     <footer>
         <div class="container">
             <p>Päivitetty: <span id="last-updated"></span></p>
-            <p>Ehdotuksia uusista materiaaleista? <button id="open-help" class="help-link">Katso ohjeet</button></p>
-            <p>Tekijä: Tero Rönkkö · <a href="mailto:tero@savonnuuskut.com">tero@savonnuuskut.com</a></p>
+            <p>Ehdotuksia tai palautetta? <button id="open-help" class="help-link">Katso ohjeet</button></p>
+            <p>Tekijä: Tero Rönkkö · <a href="mailto:tero.ronkko@gmail.com">tero.ronkko@gmail.com</a></p>
+            <p style="margin-top: 1rem; opacity: 0.7;">Powered by <a href="https://github.com/trotor/nuuskulista" target="_blank" style="color: inherit; text-decoration: underline;">Nuuskulista</a></p>
         </div>
     </footer>
 
@@ -70,7 +74,9 @@
     <div id="help-popup" class="popup-overlay">
         <div class="popup-content">
             <button id="close-popup" class="popup-close">&times;</button>
-            <h2>Ehdota uutta resurssia</h2>
+            <h2>Ota yhteyttä</h2>
+
+            <h3>📝 Ehdota uutta resurssia</h3>
             <p>Voit ehdottaa uusia materiaaleja GitHubin kautta. Ei vaadi ohjelmointiosaamista!</p>
             <ol>
                 <li>Klikkaa alla olevaa linkkiä</li>
@@ -78,8 +84,15 @@
                 <li>Täytä lomake: nimi, kuvaus, kategoria, kieli ja linkki</li>
                 <li>Lähetä ehdotus klikkaamalla "Submit new issue"</li>
             </ol>
-            <p>Ehdotuksesi käsitellään ja lisätään sivustolle, jos se sopii kokoelmaan.</p>
-            <a href="https://github.com/trotor/nuuskulista/issues/new?template=lisaa-resurssi.yml" target="_blank" class="popup-btn">Ehdota resurssia</a>
+            <a href="https://github.com/trotor/nuuskulista/issues/new?template=lisaa-resurssi.yml" target="_blank" class="popup-btn">Ehdota resurssia GitHubissa</a>
+
+            <h3 style="margin-top: 2rem;">💬 Anna palautetta tai ehdota parannuksia</h3>
+            <p>Haluatko antaa palautetta sivustosta tai ehdottaa parannuksia? Ota yhteyttä sähköpostitse:</p>
+            <p><strong><a href="mailto:tero.ronkko@gmail.com">tero.ronkko@gmail.com</a></strong></p>
+
+            <h3 style="margin-top: 2rem;">🤝 Yhteistyö</h3>
+            <p>Oletko palveluntarjoaja ja kiinnostunut yhteistyöstä? Olemme avoimia erilaisille yhteistyömuodoille!</p>
+            <p>Ota yhteyttä: <strong><a href="mailto:tero.ronkko@gmail.com">tero.ronkko@gmail.com</a></strong></p>
         </div>
     </div>
 
