@@ -1,6 +1,6 @@
 {
   "name": "nuuskulista",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/trotor/nuuskulista"
@@ -9,9 +9,11 @@
   "scripts": {
     "admin": "node server.js",
     "enrich": "node enrich-resources.js",
-    "enrich:dry": "node enrich-resources.js --dry-run"
+    "enrich:dry": "node enrich-resources.js --dry-run",
+    "tracking": "node tracking-server.js"
   },
   "changelog": [
+    { "version": "1.5.0", "date": "2026-01-07", "changes": ["Klikkausten seuranta: SQLite-tietokanta tallentaa jokaisen resurssilinkin klikkauksen", "Tracking API (Node.js + Express): /api/stats, /api/stats/daily, /api/stats/total", "Frontend lähettää automaattisesti tracking-eventin kun käyttäjä klikkaa resurssilinkkiä", "VM-deployment: Nginx reverse proxy, PM2 process manager", "Tilastojen kerääminen suosituimpien resurssien analysointiin"] },
     { "version": "1.4.0", "date": "2024-12-30", "changes": ["URL hash routing: resurssit jaettavissa suorilla linkeillä", "Jaa-nappi jokaisessa kortissa", "Ohjepainike sivuston yläreunassa", "Jaetun resurssin automaattinen korostus 10 sekunnin ajan", "Päivitetty sähköpostiosoite"] },
     { "version": "1.3.5", "date": "2024-12-30", "changes": ["Korjattu GitHub Actions workflow: poistettu turhat 'No jobs were run' -virheet"] },
     { "version": "1.3.4", "date": "2024-12-30", "changes": ["Sivusto julkaistu osoitteessa www.noutajalista.fi", "Päivitetty dokumentaatio (README, CLAUDE.md, ADMIN.md)", "Lisätty 'Powered by Nuuskulista' -merkintä", "Parannettu ohje-/palautepopup (palaute, yhteistyö)"] },
@@ -25,6 +27,7 @@
     { "version": "1.0.0", "date": "2024-12-20", "changes": ["Ensimmäinen julkaisu"] }
   ],
   "dependencies": {
+    "better-sqlite3": "^11.8.1",
     "cheerio": "^1.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

@@ -201,6 +201,14 @@ function createResourceCard(resource) {
         this.classList.toggle('expanded');
     });
 
+    // Track resource link clicks
+    const resourceLink = card.querySelector('.resource-link');
+    if (resourceLink) {
+        resourceLink.addEventListener('click', function() {
+            trackResourceClick(resource.url, resource.title);
+        });
+    }
+
     // Share button functionality
     const shareBtn = card.querySelector('.share-btn');
     shareBtn.addEventListener('click', async function(e) {
@@ -294,4 +302,28 @@ function handleHashChange() {
             }, 10000);
         }
     }, 100);
+}
+
+// Click tracking functionality
+const TRACKING_API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001/api/track'
+    : '/api/track';
+
+function trackResourceClick(resourceUrl, resourceTitle) {
+    // Send tracking request (fire and forget - don't block user navigation)
+    fetch(TRACKING_API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            resource_url: resourceUrl,
+            resource_title: resourceTitle
+        }),
+        // Don't wait for response
+        keepalive: true
+    }).catch(err => {
+        // Silently fail - tracking should never break user experience
+        console.debug('Tracking failed:', err);
+    });
 }

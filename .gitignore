@@ -25,3 +25,7 @@ node_modules/
 # Harvested resources (not yet approved)
 harvest.json
 resources/
+
+# Tracking database
+tracking.db
+tracking.db-journal
