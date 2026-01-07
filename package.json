@@ -1,6 +1,6 @@
 {
   "name": "nuuskulista",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/trotor/nuuskulista"
@@ -13,6 +13,7 @@
     "tracking": "node tracking-server.js"
   },
   "changelog": [
+    { "version": "1.5.1", "date": "2026-01-07", "changes": ["GitHub Actions CI/CD-putki: automaattinen deployment VM:lle", "Testisivu: https://muikea.fi/noutajalista/", "Deployment-dokumentaatio (DEPLOYMENT.md)", "Tuotantodeployment-workflow valmiina (deploy-production.yml)"] },
     { "version": "1.5.0", "date": "2026-01-07", "changes": ["Klikkausten seuranta: SQLite-tietokanta tallentaa jokaisen resurssilinkin klikkauksen", "Tracking API (Node.js + Express): /api/stats, /api/stats/daily, /api/stats/total", "Frontend lähettää automaattisesti tracking-eventin kun käyttäjä klikkaa resurssilinkkiä", "VM-deployment: Nginx reverse proxy, PM2 process manager", "Tilastojen kerääminen suosituimpien resurssien analysointiin"] },
     { "version": "1.4.0", "date": "2024-12-30", "changes": ["URL hash routing: resurssit jaettavissa suorilla linkeillä", "Jaa-nappi jokaisessa kortissa", "Ohjepainike sivuston yläreunassa", "Jaetun resurssin automaattinen korostus 10 sekunnin ajan", "Päivitetty sähköpostiosoite"] },
     { "version": "1.3.5", "date": "2024-12-30", "changes": ["Korjattu GitHub Actions workflow: poistettu turhat 'No jobs were run' -virheet"] },

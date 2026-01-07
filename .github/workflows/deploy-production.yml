@@ -1,0 +1,91 @@
+name: Deploy to Production (noutajalista.fi)
+
+# This workflow deploys to the production domain noutajalista.fi
+# Only triggered manually or on tagged releases
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production  # Requires GitHub Environment approval
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy files to VM (production path)
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'tracking.db' \
+            --exclude 'tracking.db-journal' \
+            --exclude '.DS_Store' \
+            --exclude '.env' \
+            --exclude 'server.js' \
+            --exclude 'admin.html' \
+            --exclude 'enrich-resources.js' \
+            --exclude '.planning' \
+            --exclude 'harvest.json' \
+            --exclude 'resources/' \
+            ./ ${VM_USER}@${VM_HOST}:~/noutajalista/
+
+      - name: Install dependencies and restart services
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          ssh ${VM_USER}@${VM_HOST} << 'EOF'
+            cd ~/noutajalista
+
+            # Load NVM
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Install dependencies
+            npm install --production
+
+            # Restart tracking server via PM2
+            pm2 restart noutajalista-tracking || pm2 start tracking-server.js --name noutajalista-tracking
+            pm2 save
+
+            # Show status
+            pm2 list
+          EOF
+
+      - name: Verify deployment
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          ssh ${VM_USER}@${VM_HOST} << 'EOF'
+            # Test tracking API
+            curl -f http://localhost:3001/api/stats > /dev/null && echo "✅ Tracking API is up" || echo "❌ Tracking API failed"
+
+            # Test Nginx serves the site
+            curl -f http://localhost/noutajalista/ > /dev/null && echo "✅ Site is accessible" || echo "❌ Site access failed"
+          EOF
+
+      - name: Post-deployment notification
+        if: success()
+        run: |
+          echo "🚀 Deployment to production successful!"
+          echo "Site: https://noutajalista.fi"
+          echo "Test: https://muikea.fi/noutajalista/"

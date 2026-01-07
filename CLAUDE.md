@@ -12,8 +12,9 @@ Suomen Noutajakoirajärjestön (SNJ) Nuusku-lehden artikkelin tukisivu. Listaa n
 
 ## Sivusto
 
-**Tuotanto:** https://www.noutajalista.fi/
-**GitHub Pages:** https://trotor.github.io/nuuskulista/
+**Tuotanto (tuleva):** https://noutajalista.fi/
+**Testisivu:** https://muikea.fi/noutajalista/
+**GitHub Pages:** https://trotor.github.io/nuuskulista/ (vanha, ei enää käytössä)
 
 ## Rakenne
 
@@ -22,6 +23,10 @@ Suomen Noutajakoirajärjestön (SNJ) Nuusku-lehden artikkelin tukisivu. Listaa n
 - `app.js` - Sivuston toiminnallisuus (suodatus, popup-ohjeet)
 - `styles.css` - Sivuston tyylit
 - `resources.js` - Resurssien data
+
+### Backend (VM-palvelimella)
+- `tracking-server.js` - Tracking API (Express + SQLite)
+- `tracking.db` - Klikkausten tietokanta
 
 ### Hallintasivusto (lokaali)
 - `admin.html` - Hallintasivu
@@ -55,6 +60,14 @@ Versionumero on `package.json`-tiedostossa muodossa `major.minor.build`.
 ```
 
 Versionumero näkyy admin-sivun ylälaidassa (klikkaa nähdäksesi versiohistoria).
+
+## Deployment
+
+**Katso:** [DEPLOYMENT.md](DEPLOYMENT.md)
+
+- **Automaattinen:** GitHub Actions deployaa muutokset VM:lle (testisivulle)
+- **Tuotanto:** Manuaalinen tai tagged release
+- **Tracking API:** PM2 käynnistää `tracking-server.js` automaattisesti
 
 ## Tekoälypromptit
 

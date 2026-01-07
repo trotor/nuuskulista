@@ -1,0 +1,90 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+      - 'app.js'
+      - 'styles.css'
+      - 'resources.js'
+      - 'tracking-server.js'
+      - '*.png'
+      - '*.ico'
+      - 'CNAME'
+      - 'noutajasanasto.md'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy files to VM
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'tracking.db' \
+            --exclude 'tracking.db-journal' \
+            --exclude '.DS_Store' \
+            --exclude '.env' \
+            --exclude 'server.js' \
+            --exclude 'admin.html' \
+            --exclude 'enrich-resources.js' \
+            --exclude '.planning' \
+            --exclude 'harvest.json' \
+            --exclude 'resources/' \
+            ./ ${VM_USER}@${VM_HOST}:~/noutajalista/
+
+      - name: Install dependencies and restart services
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          ssh ${VM_USER}@${VM_HOST} << 'EOF'
+            cd ~/noutajalista
+
+            # Load NVM
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Install dependencies if package.json changed
+            npm install --production
+
+            # Restart tracking server via PM2
+            pm2 restart noutajalista-tracking || pm2 start tracking-server.js --name noutajalista-tracking
+            pm2 save
+
+            # Show status
+            pm2 list
+          EOF
+
+      - name: Verify deployment
+        env:
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          ssh ${VM_USER}@${VM_HOST} << 'EOF'
+            # Test that tracking server is responding
+            curl -f http://localhost:3001/api/stats > /dev/null && echo "✅ Tracking API is up" || echo "❌ Tracking API failed"
+          EOF
