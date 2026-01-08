@@ -1,6 +1,6 @@
 {
   "name": "nuuskulista",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/trotor/nuuskulista"
@@ -10,9 +10,12 @@
     "admin": "node server.js",
     "enrich": "node enrich-resources.js",
     "enrich:dry": "node enrich-resources.js --dry-run",
-    "tracking": "node tracking-server.js"
+    "tracking": "node tracking-server.js",
+    "stats": "node show-stats.js",
+    "stats:live": "node show-stats.js --live"
   },
   "changelog": [
+    { "version": "1.6.1", "date": "2026-01-08", "changes": ["CLI-komento tilastojen katseluun: npm run stats", "npm run stats:live hakee tilastot tuotannosta", "Värikoodattu terminaalituloste top 20 resursseista"] },
     { "version": "1.6.0", "date": "2026-01-08", "changes": ["Julkinen tilastosivu (stats.html) - näyttää suosituimmat resurssit", "Read-only dashboard klikkausten seuraamiseen", "Päivittyy automaattisesti 30s välein"] },
     { "version": "1.5.5", "date": "2026-01-08", "changes": ["Korjattu tracking API URL muikea.fi:ssä (hostname-tarkistus)"] },
     { "version": "1.5.4", "date": "2026-01-08", "changes": ["Korjattu tracking API URL alihakemistossa (muikea.fi/noutajalista/)", "Automaattinen API-polun tunnistus pathname-perusteella"] },
@@ -37,6 +40,7 @@
     "cheerio": "^1.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "node-fetch": "^2.7.0",
     "openai": "^4.20.0"
   }
 }

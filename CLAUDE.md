@@ -43,6 +43,17 @@ Avaa http://localhost:3000/admin.html
 
 Katso tarkemmat ohjeet: [ADMIN.md](ADMIN.md)
 
+## Tilastot
+
+```bash
+npm run stats        # Näytä paikalliset tilastot
+npm run stats:live   # Hae tilastot tuotannosta
+```
+
+Tai avaa selaimessa:
+- Lokaali: http://localhost:8000/stats.html (kun tracking-serveri pyörii)
+- Tuotanto: https://muikea.fi/noutajalista/stats.html
+
 ## Versionumero ja versiohistoria
 
 Versionumero on `package.json`-tiedostossa muodossa `major.minor.build`.
