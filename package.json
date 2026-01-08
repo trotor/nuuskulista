@@ -1,6 +1,6 @@
 {
   "name": "nuuskulista",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/trotor/nuuskulista"
@@ -13,6 +13,7 @@
     "tracking": "node tracking-server.js"
   },
   "changelog": [
+    { "version": "1.5.4", "date": "2026-01-08", "changes": ["Korjattu tracking API URL alihakemistossa (muikea.fi/noutajalista/)", "Automaattinen API-polun tunnistus pathname-perusteella"] },
     { "version": "1.5.3", "date": "2026-01-08", "changes": ["Siirretty projekti ~/sites/noutajalista/ -kansioon (parempi organisointi)", "Päivitetty kaikki polut workfloweissa ja dokumentaatiossa", "Poistettu --delete rsyncistä (turvallisempi deployment)"] },
     { "version": "1.5.2", "date": "2026-01-07", "changes": ["Testataan GitHub Actions deployment-putkea"] },
     { "version": "1.5.1", "date": "2026-01-07", "changes": ["GitHub Actions CI/CD-putki: automaattinen deployment VM:lle", "Testisivu: https://muikea.fi/noutajalista/", "Deployment-dokumentaatio (DEPLOYMENT.md)", "Tuotantodeployment-workflow valmiina (deploy-production.yml)"] },

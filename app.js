@@ -305,9 +305,25 @@ function handleHashChange() {
 }
 
 // Click tracking functionality
-const TRACKING_API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3001/api/track'
-    : '/api/track';
+function getTrackingApiUrl() {
+    const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
+
+    // Localhost development
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://localhost:3001/api/track';
+    }
+
+    // If running in subdirectory (e.g., muikea.fi/noutajalista/)
+    if (pathname.startsWith('/noutajalista')) {
+        return '/noutajalista/api/track';
+    }
+
+    // Production (noutajalista.fi)
+    return '/api/track';
+}
+
+const TRACKING_API_URL = getTrackingApiUrl();
 
 function trackResourceClick(resourceUrl, resourceTitle) {
     // Send tracking request (fire and forget - don't block user navigation)
