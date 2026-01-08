@@ -6,7 +6,7 @@ server {
 
     # Allow certbot to verify domain for certificate renewal
     location /.well-known/acme-challenge/ {
-        root /home/dino/noutajalista;
+        root /home/dino/sites/noutajalista;
     }
 
     # Redirect all other HTTP requests to HTTPS
@@ -22,7 +22,7 @@ server {
     server_name noutajalista.fi www.noutajalista.fi;
 
     # Root directory for static files
-    root /home/dino/noutajalista;
+    root /home/dino/sites/noutajalista;
     index index.html;
 
     # SSL certificate paths (will be created by certbot)

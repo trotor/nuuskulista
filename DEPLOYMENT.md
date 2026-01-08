@@ -94,7 +94,7 @@ GitHub Actions → `Deploy to Production` → `Run workflow`
 ## VM:n rakenne
 
 ```
-/home/dino/noutajalista/
+/home/dino/sites/noutajalista/
 ├── index.html              # Julkinen sivu
 ├── app.js                  # Frontend JS
 ├── styles.css              # Tyylit
@@ -115,7 +115,7 @@ location /noutajalista/api/ {
 }
 
 location /noutajalista {
-    alias /home/dino/noutajalista;
+    alias /home/dino/sites/noutajalista;
     index index.html;
     try_files $uri $uri/ /noutajalista/index.html;
 }
@@ -123,8 +123,8 @@ location /noutajalista {
 
 **Tuotanto:** `/etc/nginx/sites-available/noutajalista.fi`
 ```nginx
-# Linkki: sudo ln -s /home/dino/noutajalista/noutajalista.fi.nginx /etc/nginx/sites-enabled/noutajalista.fi
-# Tiedosto: ~/noutajalista/noutajalista.fi.nginx
+# Linkki: sudo ln -s /home/dino/sites/noutajalista/noutajalista.fi.nginx /etc/nginx/sites-enabled/noutajalista.fi
+# Tiedosto: ~/sites/noutajalista/noutajalista.fi.nginx
 ```
 
 ### PM2 prosessit
@@ -145,11 +145,11 @@ Jos GitHub Actions ei toimi:
 ```bash
 # Paikallisesti
 rsync -avz --exclude 'node_modules' --exclude '.git' --exclude 'tracking.db' \
-  ./ dino@75.119.143.90:~/noutajalista/
+  ./ dino@75.119.143.90:~/sites/noutajalista/
 
 # VM:llä
 ssh dino@75.119.143.90
-cd ~/noutajalista
+cd ~/sites/noutajalista
 . ~/.nvm/nvm.sh
 npm install --production
 pm2 restart noutajalista-tracking
@@ -173,12 +173,12 @@ ssh dino@75.119.143.90
 
 # Hae Let's Encrypt -sertifikaatti
 sudo certbot certonly --webroot \
-  -w /home/dino/noutajalista \
+  -w /home/dino/sites/noutajalista \
   -d noutajalista.fi \
   -d www.noutajalista.fi
 
 # Aktivoi Nginx-konfiguraatio
-sudo ln -s /home/dino/noutajalista/noutajalista.fi.nginx /etc/nginx/sites-enabled/noutajalista.fi
+sudo ln -s /home/dino/sites/noutajalista/noutajalista.fi.nginx /etc/nginx/sites-enabled/noutajalista.fi
 sudo nginx -t
 sudo systemctl reload nginx
 ```
