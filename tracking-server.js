@@ -26,9 +26,22 @@ db.exec(`
 // Middleware
 app.use(express.json());
 
-// CORS middleware - allow requests from any origin
+// CORS middleware - allow requests only from trusted origins
+// SECURITY: Whitelist prevents competitors from sending fake tracking data
+const ALLOWED_ORIGINS = [
+  'https://noutajalista.fi',
+  'https://www.noutajalista.fi',
+  'https://muikea.fi',
+  'https://www.muikea.fi',
+  'http://localhost:3000',
+  'http://localhost:8000'
+];
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin;
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -38,10 +51,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Simple rate limiting: max 100 requests per IP per minute
+// Simple rate limiting: max 20 requests per IP per minute
+// SECURITY: Prevents bots from generating fake clicks
 const rateLimitMap = new Map();
 const RATE_LIMIT_WINDOW = 60000; // 1 minute
-const MAX_REQUESTS = 100;
+const MAX_REQUESTS = 20; // Realistic: ~1 click per 3 seconds
 
 function rateLimit(req, res, next) {
   const ip = req.ip || req.connection.remoteAddress;

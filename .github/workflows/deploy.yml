@@ -53,6 +53,8 @@ jobs:
             --exclude '.env' \
             --exclude 'server.js' \
             --exclude 'admin.html' \
+            --exclude 'stats.html' \
+            --exclude 'show-stats.js' \
             --exclude 'enrich-resources.js' \
             --exclude '.planning' \
             --exclude 'harvest.json' \

@@ -1,6 +1,6 @@
 {
   "name": "nuuskulista",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/trotor/nuuskulista"
@@ -15,6 +15,7 @@
     "stats:live": "node show-stats.js --live"
   },
   "changelog": [
+    { "version": "1.7.0", "date": "2026-01-08", "changes": ["TIETOTURVA: Rajoitettu CORS vain omiin domaineihin (estää fake-klikkaukset)", "TIETOTURVA: Rate limiting laskettu 100→20/min", "TIETOTURVA: npm audit fix (qs-paketti päivitetty)", "TIETOTURVA: stats.html poistettu tuotannosta (liiketoimintatieto suojattu)", "Tilastot vain CLI:llä: npm run stats / npm run stats:live"] },
     { "version": "1.6.1", "date": "2026-01-08", "changes": ["CLI-komento tilastojen katseluun: npm run stats", "npm run stats:live hakee tilastot tuotannosta", "Värikoodattu terminaalituloste top 20 resursseista"] },
     { "version": "1.6.0", "date": "2026-01-08", "changes": ["Julkinen tilastosivu (stats.html) - näyttää suosituimmat resurssit", "Read-only dashboard klikkausten seuraamiseen", "Päivittyy automaattisesti 30s välein"] },
     { "version": "1.5.5", "date": "2026-01-08", "changes": ["Korjattu tracking API URL muikea.fi:ssä (hostname-tarkistus)"] },
