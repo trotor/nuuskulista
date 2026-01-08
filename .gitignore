@@ -19,6 +19,14 @@ node_modules/
 # Environment
 .env
 
+# SSH keys (never commit private keys!)
+.ssh/
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+id_ecdsa*
+
 # Private planning docs (gist cloned as subfolder)
 .planning/
 
