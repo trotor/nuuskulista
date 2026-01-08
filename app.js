@@ -314,8 +314,9 @@ function getTrackingApiUrl() {
         return 'http://localhost:3001/api/track';
     }
 
-    // If running in subdirectory (e.g., muikea.fi/noutajalista/)
-    if (pathname.startsWith('/noutajalista')) {
+    // Test site (muikea.fi/noutajalista/)
+    // Check if we're on muikea.fi or if path contains /noutajalista/
+    if (hostname.includes('muikea.fi') || pathname.includes('/noutajalista/')) {
         return '/noutajalista/api/track';
     }
 
