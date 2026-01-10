@@ -1,9 +1,82 @@
 // Päivitä tätä tiedostoa lisätäksesi uusia resursseja
 // Muista päivittää myös lastUpdated-päivämäärä!
 
-const lastUpdated = "28.12.2025";
+const lastUpdated = "10.1.2026";
 
 const resources = [
+    {
+        id: "67858758",
+        title: "Ålands Retrieverförening",
+        description: "Ålands Retrieverförening tarjoaa tietoa ja resursseja noutajakoirien koulutuksesta sekä mahdollisuuden liittyä jäseneksi ja osallistua erilaisiin tapahtumiin ja kursseihin.",
+        category: "other",
+        language: "Ruotsi",
+        url: "http://www.retriever.ax/?firstRef",
+        image: "https://az729104.cdn.laget.se/emblem_5669271.png;width=1170;height=600;paddingWidth=15;bgColor=041c01;mode=pad;scale=both;anchor=middlecenter"
+    },
+    {
+        id: "4655d0ec",
+        title: "Perusasento – Podcast",
+        description: "Perusasento-podcastissa keskustellaan koirien kanssa harrastamisesta, kisaamisesta ja kouluttamisesta. Ohjelmassa käsitellään myös koiraperheen arkea sekä haasteita koiraharrastuksessa.",
+        category: "podcast",
+        language: "Suomi",
+        url: "https://podtail.com/en/podcast/perusasento/",
+        image: "https://is3-ssl.mzstatic.com/image/thumb/Podcasts115/v4/cf/20/72/cf20724c-d22e-53a6-9579-9440ef9243c1/mza_1668989270933827713.jpg/1200x1200bb.jpg"
+    },
+    {
+        id: "bdcf89bf",
+        title: "Pennun koulutus",
+        description: "Artikkelissa käsitellään pennun koulutuksen aloittamista ja perusasioita, kuten kontaktin opettamista ja häiriöttömiä harjoitusympäristöjä.",
+        category: "article",
+        language: "Suomi",
+        url: "https://www.middlerivers.fi/pennun-koulutus",
+        image: "https://www.google.com/s2/favicons?domain=www.middlerivers.fi&sz=128"
+    },
+    {
+        id: "03171b02",
+        title: "Kultaisennoutajan koulutus",
+        description: "Artikkelissa käsitellään kultaisennoutajien metsästysominaisuuksia ja koulutusta, sekä rodun historiaa ja kehitystä Suomessa.",
+        category: "article",
+        language: "Suomi",
+        url: "https://jahtimedia.fi/metsastyskoirat/kultaisestanoutajasta-metsastyskoiraksi",
+        image: "https://jahtimedia.fi/sites/default/files/styles/meta_image/public/2019-02/kuva1_6.%20pentu%20ja%20fasaani_0.JPG?h=ce81e654&itok=5T15awwR"
+    },
+    {
+        id: "7e1461c9",
+        title: "Luennot ja verkko-ohjaukset",
+        description: "Labradorinnoutajakerho järjestää luentoja ja verkko-ohjauksia eri aiheista, kuten koirankoulutus ja aktivointi. Tarjolla on myös jäsenalennuksia.",
+        category: "course",
+        language: "Suomi",
+        url: "https://labradori.doggso.com/fi/koulutus/luennot",
+        image: "https://labradori.doggso.com/fi/tiedostot/5577?variant=medium"
+    },
+    {
+        id: "1e493146",
+        title: "Pennun koulutus",
+        description: "Räätälöity perusopetus pennunomistajille, joka auttaa kouluttamaan noutajasta hyvin käyttäytyvän ja yhteiskuntakelpoisen koiran.",
+        category: "course",
+        language: "Suomi",
+        url: "https://www.karvingoldens.com/fi/pennut/pennun-koulutus",
+        image: "https://www.google.com/s2/favicons?domain=www.karvingoldens.com&sz=128"
+    },
+    {
+        id: "6880159c",
+        title: "Peruskoulutus - Labradorinnoutajakerho ry",
+        description: "Labradorinnoutajakerho tarjoaa peruskoulutus- ja harrastuskursseja koiraharrastajille, keskittyen mukavaan yhdessäoloon ja koirakkojen yksilölliseen ohjaukseen.",
+        category: "course",
+        language: "Suomi",
+        url: "https://www.labradori.fi/harrastusmuodot/peruskoulutus/",
+        image: "https://bin.yhdistysavain.fi/1584146/ZYZYElhl99ImNK6fxuq70_ylj0/Luna.jpg"
+    },
+    {
+        id: "8f9839a1",
+        title: "TassuTie",
+        description: "Koiran harjoitusten suunnittelu- ja seurantasovellus, joka auttaa omistajia seuraamaan koiransa edistymistä ja harjoituksia.",
+        category: "other",
+        language: "Suomi",
+        url: "https://www.muikea.fi/tassupolku/",
+        image: "https://www.muikea.fi/tassupolku/apple-touch-icon.png",
+        featured: true
+    },
     {
         id: "8e0fcc6d",
         title: "Svenska Kennelklubben - Kurser för dig och din hund",

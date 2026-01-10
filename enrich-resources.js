@@ -20,9 +20,10 @@ const fs = require('fs');
 const path = require('path');
 const cheerio = require('cheerio');
 const OpenAI = require('openai');
+const config = require('./config');
 
 // Kategoriat joille paikkakunta on relevantti
-const LOCATION_RELEVANT_CATEGORIES = ['trainer', 'shop', 'course', 'other'];
+const LOCATION_RELEVANT_CATEGORIES = config.locationRelevantCategories;
 
 // Facebook-URL tunnistus (ei voi hakea sivua)
 function isFacebookUrl(url) {
@@ -105,7 +106,7 @@ async function fetchPage(url) {
     try {
         const response = await fetch(url, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (compatible; NoutajalistaBot/1.0)'
+                'User-Agent': `Mozilla/5.0 (compatible; ${config.ai.userAgent.enricher})`
             },
             timeout: 10000
         });
@@ -184,10 +185,7 @@ async function findLocationWithAI(text, resourceTitle) {
             messages: [
                 {
                     role: 'system',
-                    content: `Olet avustaja joka etsii paikkakuntia suomalaisilta verkkosivuilta.
-                    Palauta VAIN paikkakunnan nimi (esim. "Kuopio" tai "Helsinki") tai "null" jos paikkakuntaa ei löydy.
-                    Älä palauta mitään muuta tekstiä. Älä palauta osoitteita, vain paikkakunnan tai alueen nimi.
-                    Jos kyseessä on koko Suomen kattava palvelu, palauta "null".`
+                    content: config.ai.locationPrompt
                 },
                 {
                     role: 'user',

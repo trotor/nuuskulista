@@ -4,9 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const crypto = require('crypto');
+const config = require('./config');
 
 const app = express();
-const PORT = 3000;
+const PORT = config.admin.port;
 
 // Generoi uniikki ID URL:sta (8-merkkinen hash)
 function generateIdFromUrl(url) {
@@ -272,7 +273,7 @@ const resources = [\n`;
 async function fetchImageFromUrl(url) {
     try {
         const response = await fetch(url, {
-            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Nuuskulista/1.0)' }
+            headers: { 'User-Agent': `Mozilla/5.0 (compatible; ${config.ai.userAgent.server})` }
         });
         if (!response.ok) return null;
 
@@ -374,7 +375,7 @@ app.post('/api/fetch-resource', async (req, res) => {
         // Hae sivu
         const response = await fetch(url, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (compatible; Nuuskulista/1.0)'
+                'User-Agent': `Mozilla/5.0 (compatible; ${config.ai.userAgent.server})`
             }
         });
 
@@ -422,26 +423,7 @@ app.post('/api/fetch-resource', async (req, res) => {
             messages: [
                 {
                     role: 'system',
-                    content: `Olet avustaja joka analysoi nettisivuja noutajakoirien koulutusmateriaalien listaa varten.
-
-Palauta JSON-muodossa:
-{
-  "title": "Resurssin nimi (lyhyt, kuvaava)",
-  "description": "1-2 virkkeen kuvaus sisällöstä suomeksi",
-  "category": "podcast|video|article|course|trainer|shop|other",
-  "language": "Suomi|Englanti|Ruotsi|Saksa"
-}
-
-Kategoriat:
-- podcast: Podcastit, äänitteet
-- video: YouTube, webinaarit, videokurssit
-- article: Artikkelit, blogit, oppaat
-- course: Verkkokurssit, koulutusohjelmat
-- trainer: Kouluttajat, valmentajat
-- shop: Verkkokaupat, tarvikkeet
-- other: Muut
-
-Tunnista kieli sisällöstä. Palauta VAIN JSON, ei muuta tekstiä.`
+                    content: config.ai.systemPrompt
                 },
                 {
                     role: 'user',
@@ -574,8 +556,8 @@ const resources = [\n`;
 });
 
 app.listen(PORT, () => {
-    console.log(`\n🐕 Nuuskulista Admin`);
-    console.log(`   http://localhost:${PORT}/admin.html`);
+    console.log(`\n${config.brand.emoji} ${config.brand.name} Admin`);
+    console.log(`   http://localhost:${PORT}${config.admin.path}`);
     if (!process.env.OPENAI_API_KEY) {
         console.log(`\n⚠️  OPENAI_API_KEY puuttuu - URL-haku ei toimi`);
         console.log(`   Käynnistä: OPENAI_API_KEY=xxx npm run admin\n`);
