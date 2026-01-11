@@ -1,7 +1,7 @@
 // Päivitä tätä tiedostoa lisätäksesi uusia resursseja
 // Muista päivittää myös lastUpdated-päivämäärä!
 
-const lastUpdated = "10.1.2026";
+const lastUpdated = "11.1.2026";
 
 const resources = [
     {
@@ -14,13 +14,94 @@ const resources = [
         image: "https://az729104.cdn.laget.se/emblem_5669271.png;width=1170;height=600;paddingWidth=15;bgColor=041c01;mode=pad;scale=both;anchor=middlecenter"
     },
     {
+        id: "7b52c9c4",
+        title: "Golden Retriever Club of America - Field Training",
+        description: "Kultaisennoutajien rotujärjestön kattava osio metsästyskoulutuksesta. GRCA tukee kultaisennoutajaa ensisijaisesti metsästyskoirana. Jäsenkerhot järjestävät working testejä ja metsästyskokeita. Sisältää artikkeleita aloittelijoille ja edistyneille, mukaan lukien Kathryn Newmanin vinkit aloittamiseen.",
+        category: "article",
+        language: "Englanti",
+        url: "https://grca.org/events/field-events-field-training/",
+        image: "https://www.google.com/s2/favicons?domain=grca.org&sz=128"
+    },
+    {
+        id: "6aed5f8e",
+        title: "Totally Gundogs - Kirja-arvostelut ja artikkelit",
+        description: "Brittiläinen metsästyskoirasivusto joka tarjoaa kattavia arvosteluja metsästyskoirakirjoista ja -välineistä. '10 interesting gundog books' -artikkeli listaa klassikot ja uudemmat teokset. Sivusto on erinomainen resurssi eri koulutusmenetelmien vertailuun ennen materiaalin hankintaa.",
+        category: "article",
+        language: "Englanti",
+        url: "https://totallygundogs.com/gundog-training-books/",
+        image: "http://totallydogtraining.com/wp-content/uploads/2014/06/what-is-so-great-about-luring-300x261.jpg"
+    },
+    {
+        id: "2cd08645",
+        title: "Turid Rugaas: Rauhoittavat signaalit",
+        description: "Klassikkoteos koiran kehonkielen ymmärtämisestä. Turid Rugaas on norjalainen koirakäyttäytymisen asiantuntija joka on tunnistanut koirien käyttämät rauhoittavat signaalit. Kirja opettaa lukemaan koiraa aivan uudella tavalla ja ymmärtämään mitä koira viestii. Suomeksi käännetty perusteos jokaiselle koiranomistajalle.",
+        category: "book",
+        language: "Suomi",
+        url: "https://kulkurit.fi/koiran-adoptointi/adoptioprosessi/kirjoja-koiran-omistajalle/",
+        image: "https://www.google.com/s2/favicons?domain=kulkurit.fi&sz=128"
+    },
+    {
+        id: "e57ce243",
+        title: "Tuire Kaimio: Koirien käyttäytyminen",
+        description: "Tuire Kaimion perusteellinen teos koiran käyttäytymisen ymmärtämisestä. Yhdessä Pennun kasvatus -kirjan kanssa muodostaa kokonaisuuden joka antaa hyvät perustiedot koiramaiseen elämään. Auttaa ymmärtämään miksi koira käyttäytyy tietyllä tavalla ja miten siihen voi vaikuttaa positiivisesti.",
+        category: "book",
+        language: "Suomi",
+        url: "https://www.adlibris.com/fi/kirja/koirien-kayttaytyminen-9789510335703",
+        image: ""
+    },
+    {
+        id: "f2ff52dc",
+        title: "Sporting Dog Talk Podcast",
+        description: "Podcast joka käsittelee kultaisennoutajan koulutusta, pentujen koulutusta ja metsästyskoirien koulutusvinkkejä. Erityisesti field-bred kultaisennoutajien koulutukseen keskittyvä sisältö tarjoaa käytännön vinkkejä sekä aloittelijoille että kokeneemmille kouluttajille.",
+        category: "podcast",
+        language: "Englanti",
+        url: "https://www.sportingdogtalk.com/podcasts",
+        image: "https://static.hugedomains.com/images/hdv3-img/og_hugedomains.png"
+    },
+    {
+        id: "2257f8bd",
+        title: "Build From Here Podcast",
+        description: "Cornerstone Gundog Academyn tuottama podcast metsästäjille ja urheilukoiraharrastajille. Isäntä Joshua Parvin haastattelee noutajien omistajia ja käsittelee metsästyskoiran koulutuksen iloja ja haasteita. Podcast täydentää Cornerstonen online-koulutusohjelmaa ja tarjoaa inspiraatiota oman koiran kouluttamiseen.",
+        category: "podcast",
+        language: "Englanti",
+        url: "https://www.cornerstonegundogacademy.com/",
+        image: "https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/sites/6081/images/kFTbCRH3SDmqOzkFXX2q_c9s4AicbQB8bb6Ipt72w_cga_buildfromhere.jpg"
+    },
+    {
+        id: "2ab68b27",
+        title: "Gundogs and Guard Dogs Podcast",
+        description: "Kahden kokopäiväisen koirakäyttäytymisasiantuntijan ja palkitun kouluttajan valaiseva podcast. Joka toinen viikko julkaistavissa jaksoissa keskustellaan koirista, käytös- ja koulutusvaikeuksista, ajankohtaisista koira-aiheista ja vähän elämästä yleensäkin. Isännät ovat geordie Skotlannista ja lontoolainen, jotka juhlistavat erojaan.",
+        category: "podcast",
+        language: "Englanti",
+        url: "https://lezgraham.com/GundogsAndGuardDogs",
+        image: "https://lezgraham.com/Content/Images/Podcast/gundogs-and-guard-dogs.png"
+    },
+    {
+        id: "ee580d77",
+        title: "Hold the Line Podcast",
+        description: "Johtava force-free gundog -koulutuksen podcast, joka on sitoutunut auttamaan kouluttamaan koiraa edistyneelle tasolle motivoivilla menetelmillä ilman pelkoa tai kipua. Podcast tarjoaa ilmaisia vinkkejä ja tietoa metsästyskoiran koulutuksesta tehokkailla, mutta lempeillä menetelmillä. Sopii erityisesti herkille koirille.",
+        category: "podcast",
+        language: "Englanti",
+        url: "https://www.forcefreegundog.com/podcast",
+        image: "https://www.forcefreegundog.com/content-assets/public/eyJhbGciOiJIUzI1NiJ9.eyJvYmplY3Rfa2V5IjoiNHR5aWM4amt1cDd5bGFpZnd1OXYwMTF4eG5tNCIsImRvbWFpbiI6Ind3dy5mb3JjZWZyZWVndW5kb2cuY29tIn0.qqetvuBl3e7jcNtgKm-e8uIFm3CJcj1pVc5Hj9fPysc"
+    },
+    {
         id: "4655d0ec",
-        title: "Perusasento – Podcast",
-        description: "Perusasento-podcastissa keskustellaan koirien kanssa harrastamisesta, kisaamisesta ja kouluttamisesta. Ohjelmassa käsitellään myös koiraperheen arkea sekä haasteita koiraharrastuksessa.",
+        title: "Perusasento Podcast",
+        description: "Suomalainen koirapodcast jossa Elli Kinnunen ja Ninja Korpelin keskustelevat koirien kanssa harrastamisesta, kisaamisesta ja kouluttamisesta. Podcastissa käsitellään koiran käytöksen ymmärtämistä, koiraharrastuksen haasteita ja ongelmia suoralla puhetyylillä. Kouluttaminen on keskeisessä asemassa, ja jaksoissa on myös mainoksia nosework-kursseista.",
         category: "podcast",
         language: "Suomi",
         url: "https://podtail.com/en/podcast/perusasento/",
         image: "https://is3-ssl.mzstatic.com/image/thumb/Podcasts115/v4/cf/20/72/cf20724c-d22e-53a6-9579-9440ef9243c1/mza_1668989270933827713.jpg/1200x1200bb.jpg"
+    },
+    {
+        id: "b7f22d31",
+        title: "The Dog House Podcast",
+        description: "Ammattimaiset noutajakouluttajat Adam Campbell ja Jimmy Rodgers keskustelevat koirakoulutuksesta ja sorsastuksesta yhdessä vieraiden kanssa. Podcast tarjoaa asiantuntijaneuvoja koulutustekniikkoihin ja vinkkejä vahvan siteen rakentamiseen noutajan kanssa. Vieraina alan ammattilaisia noutajamaailmasta ja ulkoiluteollisuudesta.",
+        category: "podcast",
+        language: "Englanti",
+        url: "https://doghousepod.com/",
+        image: ""
     },
     {
         id: "bdcf89bf",
@@ -76,6 +157,33 @@ const resources = [
         url: "https://www.muikea.fi/tassupolku/",
         image: "https://www.muikea.fi/tassupolku/apple-touch-icon.png",
         featured: true
+    },
+    {
+        id: "2ee2790a",
+        title: "Springerspanielit ry - Metsästys",
+        description: "Suomen springerspanieliyhdistyksen sivusto joka käsittelee walesinspringerspanielia metsästyskoirana. Koulutusvinkkejä: rotua ei voi kouluttaa pakottamalla, vaan koira on saatava tekemään asiat oma-aloitteisesti. Tietoa metsästyskokeista ja käyttövalion vaatimuksista.",
+        category: "other",
+        language: "Suomi",
+        url: "https://springerspanielit.fi/metsastys-walesinspringerspanieli-metsastyskoirana/",
+        image: ""
+    },
+    {
+        id: "26e788e6",
+        title: "Say It Once Dog Training",
+        description: "Täydennä kuvaus",
+        category: "video",
+        language: "Englanti",
+        url: "https://www.facebook.com/SayItOnceDogTraining",
+        image: "https://www.facebook.com/images/fb_icon_325x325.png"
+    },
+    {
+        id: "09b9067b",
+        title: "Tuukkanikola K9",
+        description: "Täydennä kuvaus",
+        category: "trainer",
+        language: "Suomi",
+        url: "https://www.facebook.com/tuukkanikolaK9",
+        image: "https://www.facebook.com/images/fb_icon_325x325.png"
     },
     {
         id: "8e0fcc6d",

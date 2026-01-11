@@ -1,9 +1,147 @@
 const express = require('express');
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
+const vm = require('vm');
 
 const app = express();
 const PORT = process.env.TRACKING_PORT || 3001;
+
+// Load resources from resources.js
+function loadResources() {
+    try {
+        const resourcesPath = path.join(__dirname, 'resources.js');
+        const code = fs.readFileSync(resourcesPath, 'utf8');
+
+        // Create a sandbox to run resources.js
+        const sandbox = {};
+        vm.createContext(sandbox);
+        vm.runInContext(code, sandbox);
+
+        return sandbox.resources || [];
+    } catch (error) {
+        console.error('Error loading resources:', error);
+        return [];
+    }
+}
+
+// Find resource by ID or slug
+function findResource(identifier) {
+    const resources = loadResources();
+
+    // Try to find by ID first
+    let resource = resources.find(r => r.id === identifier);
+    if (resource) return resource;
+
+    // Try to find by slug (title-based)
+    const slug = identifier.toLowerCase();
+    resource = resources.find(r => {
+        const titleSlug = r.title
+            .toLowerCase()
+            .replace(/ä/g, 'a')
+            .replace(/ö/g, 'o')
+            .replace(/å/g, 'a')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '');
+        return titleSlug === slug;
+    });
+
+    return resource;
+}
+
+// Category names in Finnish
+const categoryNames = {
+    podcast: 'Podcast',
+    video: 'Video',
+    article: 'Artikkeli',
+    course: 'Kurssi',
+    trainer: 'Kouluttaja',
+    shop: 'Verkkokauppa',
+    book: 'Kirja',
+    other: 'Resurssi'
+};
+
+// Generate share page HTML with Open Graph meta tags
+function generateSharePage(resource, baseUrl) {
+    const siteTitle = 'Noutajalista';
+    const categoryName = categoryNames[resource.category] || 'Resurssi';
+    const title = `${resource.title} | ${siteTitle}`;
+    const description = resource.description || `${categoryName} noutajakoirien koulutukseen`;
+    const image = resource.image || `${baseUrl}/banner.png`;
+    const pageUrl = `${baseUrl}/#${resource.id}`;
+
+    return `<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(title)}</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="${escapeHtml(pageUrl)}">
+    <meta property="og:title" content="${escapeHtml(title)}">
+    <meta property="og:description" content="${escapeHtml(description)}">
+    <meta property="og:image" content="${escapeHtml(image)}">
+    <meta property="og:site_name" content="${siteTitle}">
+    <meta property="og:locale" content="fi_FI">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${escapeHtml(title)}">
+    <meta name="twitter:description" content="${escapeHtml(description)}">
+    <meta name="twitter:image" content="${escapeHtml(image)}">
+
+    <!-- Redirect to main page -->
+    <meta http-equiv="refresh" content="0;url=${escapeHtml(pageUrl)}">
+    <link rel="canonical" href="${escapeHtml(pageUrl)}">
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <p>Siirrytään sivulle...</p>
+        <p><a href="${escapeHtml(pageUrl)}">Klikkaa tästä jos sivu ei avaudu automaattisesti</a></p>
+    </div>
+    <script>window.location.replace("${escapeJs(pageUrl)}");</script>
+</body>
+</html>`;
+}
+
+// HTML escape helper
+function escapeHtml(text) {
+    if (!text) return '';
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// JS escape helper for inline scripts
+function escapeJs(text) {
+    if (!text) return '';
+    return text
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\"')
+        .replace(/'/g, "\\'")
+        .replace(/\n/g, '\\n');
+}
 
 // Initialize SQLite database
 const db = new Database('tracking.db');
@@ -92,6 +230,28 @@ setInterval(() => {
 }, RATE_LIMIT_WINDOW);
 
 // API Routes
+
+// Share page with Open Graph meta tags
+app.get('/r/:id', (req, res) => {
+    const identifier = req.params.id;
+    const resource = findResource(identifier);
+
+    if (!resource) {
+        // Resource not found, redirect to main page
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        return res.redirect(302, baseUrl.replace(':3001', ''));
+    }
+
+    // Determine base URL (production vs development)
+    let baseUrl = 'https://noutajalista.fi';
+    const host = req.get('host');
+    if (host.includes('localhost') || host.includes('muikea.fi')) {
+        baseUrl = `${req.protocol}://${host.replace(':3001', '')}`;
+    }
+
+    const html = generateSharePage(resource, baseUrl);
+    res.type('html').send(html);
+});
 
 // Track a click
 app.post('/api/track', rateLimit, (req, res) => {

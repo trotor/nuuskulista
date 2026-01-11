@@ -150,8 +150,8 @@ function createResourceCard(resource) {
     const card = document.createElement('div');
     card.className = 'resource-card' + (resource.featured ? ' featured' : '');
 
-    // Generate unique ID for this resource
-    const resourceId = generateSlug(resource.title);
+    // Use resource.id if available, otherwise generate from title
+    const resourceId = resource.id || generateSlug(resource.title);
     card.setAttribute('data-resource-id', resourceId);
 
     const categoryLabel = getCategoryLabel(resource.category);
@@ -213,7 +213,8 @@ function createResourceCard(resource) {
     const shareBtn = card.querySelector('.share-btn');
     shareBtn.addEventListener('click', async function(e) {
         e.preventDefault();
-        const shareUrl = `${window.location.origin}${window.location.pathname}#${resourceId}`;
+        // Use /r/ path for sharing - enables Open Graph meta tags for social media previews
+        const shareUrl = `${window.location.origin}/r/${resourceId}`;
 
         try {
             await navigator.clipboard.writeText(shareUrl);
