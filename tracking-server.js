@@ -14,9 +14,13 @@ function loadResources() {
         const code = fs.readFileSync(resourcesPath, 'utf8');
 
         // Create a sandbox to run resources.js
+        // Replace const/let with var to make variables global in sandbox context
         const sandbox = {};
         vm.createContext(sandbox);
-        vm.runInContext(code, sandbox);
+        const modifiedCode = code
+            .replace(/^const /gm, 'var ')
+            .replace(/^let /gm, 'var ');
+        vm.runInContext(modifiedCode, sandbox);
 
         return sandbox.resources || [];
     } catch (error) {
